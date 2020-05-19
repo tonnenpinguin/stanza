@@ -6,10 +6,9 @@ StanzaJS does work with React Native (through 0.60), but it requires a little bi
 
 -   `node-libs-react-native`
 -   `vm-browserify`
--   `react-native-randombytes`
 
 ```sh
-npm i --save node-libs-react-native vm-browserify react-native-randombytes
+npm i --save node-libs-react-native vm-browserify
 ```
 
 ## 2. Configure metro.config.js to shim node libraries
@@ -39,27 +38,7 @@ module.exports = {
 
 The `vm` module is not currently shimmed by `node-libs-react-native` ([but there is a PR for it](https://github.com/parshap/node-libs-react-native/pull/17)).
 
-## 3. Link native modules
-
-Linking modules depends on the version of React Native you are using.
-
-### Using React Native 0.60:
-
-Install CocoaPods for your project:
-
-```sh
-cd ios && pod install;
-```
-
-### Using React Native 0.59 and earlier:
-
-Link the `react-native-randombytes` module:
-
-```sh
-react-native link
-```
-
-## 4. Add node globals shim:
+## 3. Add node globals shim:
 
 Add an import for `node-libs-react-native/globals`:
 

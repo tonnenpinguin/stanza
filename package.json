@@ -9,22 +9,21 @@
         "Steven Lloyd Watkin <lloyd@evilprofessor.co.uk>"
     ],
     "dependencies": {
+        "async": "^3.0.1",
+        "node-fetch": "^2.6.0",
+        "punycode": "^2.1.1",
+        "readable-stream": "^2.3.6",
+        "sdp": "^2.10.0",
+        "stanza-shims": "git://github.com/tonnenpinguin/stanza-shims.git#use_expo_crypto",
+        "tslib": "^1.9.3",
+        "ws": "^7.2.1"
+    },
+    "devDependencies": {
         "@types/async": "^3.0.3",
         "@types/node": "^12.12.20",
         "@types/punycode": "^2.1.0",
         "@types/readable-stream": "^2.3.5",
         "@types/ws": "^6.0.4",
-        "async": "^3.0.1",
-        "node-fetch": "^2.6.0",
-        "punycode": "^2.1.1",
-        "react-native-randombytes": "^3.5.3",
-        "readable-stream": "^2.3.6",
-        "sdp": "^2.10.0",
-        "stanza-shims": "^1.1.1",
-        "tslib": "^1.9.3",
-        "ws": "^7.2.1"
-    },
-    "devDependencies": {
         "@types/jest": "^25.2.1",
         "@typescript-eslint/eslint-plugin": "^2.31.0",
         "@typescript-eslint/parser": "^2.31.0",

@@ -93,4 +93,4 @@ test('End to end', done => {
     });
 
     client1.connect();
-});
+}, 10000);
