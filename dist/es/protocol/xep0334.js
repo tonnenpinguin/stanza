@@ -45,7 +45,9 @@ function processingHints() {
                 xml.appendChild(createElement(NS_HINTS, 'no-copy', context.namespace, xml));
             }
             if (value.noPermanentStore) {
-                xml.appendChild(createElement(NS_HINTS, 'no-permanent-store', context.namespace, xml));
+                xml.appendChild(
+                    createElement(NS_HINTS, 'no-permanent-store', context.namespace, xml)
+                );
             }
             if (value.noStore) {
                 xml.appendChild(createElement(NS_HINTS, 'no-store', context.namespace, xml));

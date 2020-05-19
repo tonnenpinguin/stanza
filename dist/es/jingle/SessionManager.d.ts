@@ -21,13 +21,22 @@ export interface SessionManagerConfig {
     };
     hasRTCPeerConnection?: boolean;
     peerConnectionConstraints?: any;
-    performTieBreak?: (session: BaseSession, req: IQ & {
-        jingle: Jingle;
-    }) => boolean;
-    prepareSession?: (opts: any, req?: IQ & {
-        jingle: Jingle;
-    }) => BaseSession | undefined;
-    createPeerConnection?: (session: BaseSession, opts?: RTCConfiguration) => RTCPeerConnection | undefined;
+    performTieBreak?: (
+        session: BaseSession,
+        req: IQ & {
+            jingle: Jingle;
+        }
+    ) => boolean;
+    prepareSession?: (
+        opts: any,
+        req?: IQ & {
+            jingle: Jingle;
+        }
+    ) => BaseSession | undefined;
+    createPeerConnection?: (
+        session: BaseSession,
+        opts?: RTCConfiguration
+    ) => RTCPeerConnection | undefined;
 }
 export default class SessionManager extends EventEmitter {
     selfID?: string;
@@ -39,13 +48,22 @@ export default class SessionManager extends EventEmitter {
     };
     iceServers: RTCIceServer[];
     config: SessionManagerConfig;
-    performTieBreak: (session: BaseSession, req: IQ & {
-        jingle: Jingle;
-    }) => boolean;
-    prepareSession: (opts: any, req?: IQ & {
-        jingle: Jingle;
-    }) => BaseSession | undefined;
-    createPeerConnection: (session: BaseSession, opts?: RTCConfiguration) => RTCPeerConnection | undefined;
+    performTieBreak: (
+        session: BaseSession,
+        req: IQ & {
+            jingle: Jingle;
+        }
+    ) => boolean;
+    prepareSession: (
+        opts: any,
+        req?: IQ & {
+            jingle: Jingle;
+        }
+    ) => BaseSession | undefined;
+    createPeerConnection: (
+        session: BaseSession,
+        opts?: RTCConfiguration
+    ) => RTCPeerConnection | undefined;
     constructor(conf?: SessionManagerConfig);
     addICEServer(server: RTCIceServer | ExternalService | string): void;
     resetICEServers(): void;
@@ -53,14 +71,23 @@ export default class SessionManager extends EventEmitter {
     forgetSession(session: BaseSession): void;
     createMediaSession(peer: string, sid?: string, stream?: MediaStream): MediaSession;
     createFileTransferSession(peer: string, sid?: string): FileTransferSession;
-    endPeerSessions(peer: string, reason?: JingleReasonCondition | JingleReason, silent?: boolean): void;
+    endPeerSessions(
+        peer: string,
+        reason?: JingleReasonCondition | JingleReason,
+        silent?: boolean
+    ): void;
     endAllSessions(reason?: JingleReasonCondition | JingleReason, silent?: boolean): void;
-    process(req: IQ & {
-        jingle: Jingle;
-    }): void;
-    signal(session: BaseSession, data: IQ & {
-        jingle: Jingle;
-    }): void;
+    process(
+        req: IQ & {
+            jingle: Jingle;
+        }
+    ): void;
+    signal(
+        session: BaseSession,
+        data: IQ & {
+            jingle: Jingle;
+        }
+    ): void;
     private _createIncomingSession;
     private _sendError;
     private _log;

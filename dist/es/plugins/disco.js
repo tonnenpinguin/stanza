@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import Disco from '../helpers/DiscoManager';
 import * as JID from '../JID';
 import { NS_DISCO_INFO, NS_DISCO_ITEMS } from '../Namespaces';
@@ -19,28 +19,30 @@ export default function (client) {
         client.features.negotiated.caps = true;
         done();
     });
-    client.getDiscoInfo = (jid, node) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            disco: {
-                node,
-                type: 'info'
-            },
-            to: jid,
-            type: 'get'
+    client.getDiscoInfo = (jid, node) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                disco: {
+                    node,
+                    type: 'info'
+                },
+                to: jid,
+                type: 'get'
+            });
+            return Object.assign({ extensions: [], features: [], identities: [] }, resp.disco);
         });
-        return Object.assign({ extensions: [], features: [], identities: [] }, resp.disco);
-    });
-    client.getDiscoItems = (jid, node) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            disco: {
-                node,
-                type: 'items'
-            },
-            to: jid,
-            type: 'get'
+    client.getDiscoItems = (jid, node) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                disco: {
+                    node,
+                    type: 'items'
+                },
+                to: jid,
+                type: 'get'
+            });
+            return Object.assign({ items: [] }, resp.disco);
         });
-        return Object.assign({ items: [] }, resp.disco);
-    });
     client.updateCaps = () => {
         const node = client.config.capsNode || 'https://stanzajs.org';
         return client.disco.updateCaps(node);
@@ -68,7 +70,10 @@ export default function (client) {
         const { type, node } = iq.disco;
         if (type === 'info') {
             client.sendIQResult(iq, {
-                disco: Object.assign(Object.assign({}, client.disco.getNodeInfo(node || '')), { node, type: 'info' })
+                disco: Object.assign(Object.assign({}, client.disco.getNodeInfo(node || '')), {
+                    node,
+                    type: 'info'
+                })
             });
         }
         if (type === 'items') {

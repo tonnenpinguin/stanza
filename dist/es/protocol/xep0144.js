@@ -4,7 +4,14 @@
 // Source: https://xmpp.org/extensions/xep-0144.html
 // Version: 1.1.1 (2017-11-28)
 // ====================================================================
-import { attribute, extendIQ, extendMessage, JIDAttribute, multipleChildText, splicePath } from '../jxt';
+import {
+    attribute,
+    extendIQ,
+    extendMessage,
+    JIDAttribute,
+    multipleChildText,
+    splicePath
+} from '../jxt';
 import { NS_ROSTER_EXCHANGE } from '../Namespaces';
 const Protocol = [
     extendMessage({

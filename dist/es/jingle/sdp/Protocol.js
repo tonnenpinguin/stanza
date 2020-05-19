@@ -145,9 +145,9 @@ export function convertIntermediateToRequest(session, role, transportType) {
                 application: isRTP
                     ? convertIntermediateToApplication(media, role)
                     : {
-                        applicationType: 'datachannel',
-                        protocol: media.protocol
-                    },
+                          applicationType: 'datachannel',
+                          protocol: media.protocol
+                      },
                 creator: JingleSessionRole.Initiator,
                 name: media.mid,
                 senders: directionToSenders(role, media.direction),
@@ -156,9 +156,9 @@ export function convertIntermediateToRequest(session, role, transportType) {
         }),
         groups: session.groups
             ? session.groups.map(group => ({
-                contents: group.mids,
-                semantics: group.semantics
-            }))
+                  contents: group.mids,
+                  semantics: group.semantics
+              }))
             : []
     };
 }

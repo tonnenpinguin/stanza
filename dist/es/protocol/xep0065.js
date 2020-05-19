@@ -4,7 +4,14 @@
 // Source: https://xmpp.org/extensions/xep-0065.html
 // Version: 1.8.1 (2015-09-17)
 // ====================================================================
-import { attribute, childAttribute, childJIDAttribute, childText, integerAttribute, JIDAttribute } from '../jxt';
+import {
+    attribute,
+    childAttribute,
+    childJIDAttribute,
+    childText,
+    integerAttribute,
+    JIDAttribute
+} from '../jxt';
 import { NS_SOCKS5 } from '../Namespaces';
 const Protocol = [
     {

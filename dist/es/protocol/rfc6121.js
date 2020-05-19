@@ -4,7 +4,20 @@
 // --------------------------------------------------------------------
 // Source: https://tools.ietf.org/html/rfc6121
 // ====================================================================
-import { attribute, booleanAttribute, childAlternateLanguageText, childAttribute, childBoolean, childInteger, childText, extendMessage, extendPresence, extendStreamFeatures, JIDAttribute, multipleChildText } from '../jxt';
+import {
+    attribute,
+    booleanAttribute,
+    childAlternateLanguageText,
+    childAttribute,
+    childBoolean,
+    childInteger,
+    childText,
+    extendMessage,
+    extendPresence,
+    extendStreamFeatures,
+    JIDAttribute,
+    multipleChildText
+} from '../jxt';
 import { NS_ROSTER, NS_ROSTER_VERSIONING, NS_SUBSCRIPTION_PREAPPROVAL } from '../Namespaces';
 const Protocol = [
     extendStreamFeatures({

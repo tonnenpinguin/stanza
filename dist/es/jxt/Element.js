@@ -10,8 +10,7 @@ export default class XMLElement {
                 const xmlChild = new XMLElement(child.name, child.attributes, child.children);
                 xmlChild.parent = this;
                 this.children.push(xmlChild);
-            }
-            else {
+            } else {
                 this.children.push(child);
             }
         }
@@ -19,8 +18,7 @@ export default class XMLElement {
     getName() {
         if (this.name.indexOf(':') >= 0) {
             return this.name.substr(this.name.indexOf(':') + 1);
-        }
-        else {
+        } else {
             return this.name;
         }
     }
@@ -86,9 +84,11 @@ export default class XMLElement {
     getChildren(name, xmlns) {
         const result = [];
         for (const child of this.children) {
-            if (typeof child !== 'string' &&
+            if (
+                typeof child !== 'string' &&
                 child.getName() === name &&
-                (!xmlns || child.getNamespace() === xmlns)) {
+                (!xmlns || child.getNamespace() === xmlns)
+            ) {
                 result.push(child);
             }
         }
@@ -129,13 +129,13 @@ export default class XMLElement {
     toJSON() {
         const children = this.children
             .map(child => {
-            if (typeof child === 'string') {
-                return child;
-            }
-            if (child) {
-                return child.toJSON();
-            }
-        })
+                if (typeof child === 'string') {
+                    return child;
+                }
+                if (child) {
+                    return child.toJSON();
+                }
+            })
             .filter(child => !!child);
         // Strip any undefined/null attributes
         const attrs = {};
@@ -156,8 +156,7 @@ export default class XMLElement {
             for (const child of this.children) {
                 if (typeof child === 'string') {
                     output += escapeXMLText(child);
-                }
-                else if (child) {
+                } else if (child) {
                     output += child.toString();
                 }
             }
@@ -175,8 +174,7 @@ export default class XMLElement {
         }
         if (allowSelfClose && this.children.length === 0) {
             output += '/>';
-        }
-        else {
+        } else {
             output += '>';
         }
         return output;
@@ -188,17 +186,14 @@ export default class XMLElement {
         if (!prefix) {
             if (this.attributes.xmlns) {
                 return this.attributes.xmlns;
-            }
-            else if (this.parent) {
+            } else if (this.parent) {
                 return this.parent.findNamespaceForPrefix();
             }
-        }
-        else {
+        } else {
             const attr = 'xmlns:' + prefix;
             if (this.attributes[attr]) {
                 return this.attributes[attr];
-            }
-            else if (this.parent) {
+            } else if (this.parent) {
                 return this.parent.findNamespaceForPrefix(prefix);
             }
         }

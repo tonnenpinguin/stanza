@@ -8,4 +8,6 @@ export * from './Helpers';
 export { default as Parser, parse } from './Parser';
 export { default as StreamParser, ParsedData } from './StreamParser';
 export { Registry, Translator, XMLElement, JSONElement };
-export declare function define(definitions: Array<Definition | Plugin> | Definition | Plugin): Plugin;
+export declare function define(
+    definitions: Array<Definition | Plugin> | Definition | Plugin
+): Plugin;

@@ -1,5 +1,13 @@
 import { Agent } from '../';
-import { Blocking, BlockingList, IQ, ReceivedIQSet, Roster, RosterItem, RosterResult } from '../protocol';
+import {
+    Blocking,
+    BlockingList,
+    IQ,
+    ReceivedIQSet,
+    Roster,
+    RosterItem,
+    RosterResult
+} from '../protocol';
 declare module '../' {
     interface Agent {
         getRoster(): Promise<RosterResult>;

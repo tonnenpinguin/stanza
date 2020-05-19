@@ -1,6 +1,15 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { IQ, Message, Presence, StreamManagementAck, StreamManagementEnable, StreamManagementEnabled, StreamManagementFailed, StreamManagementResume } from '../protocol';
+import {
+    IQ,
+    Message,
+    Presence,
+    StreamManagementAck,
+    StreamManagementEnable,
+    StreamManagementEnabled,
+    StreamManagementFailed,
+    StreamManagementResume
+} from '../protocol';
 declare type Unacked = ['message', Message] | ['presence', Presence] | ['iq', IQ];
 interface SMState {
     allowResume: boolean;
@@ -34,8 +43,14 @@ export default class StreamManagement extends EventEmitter {
     failed(resp: StreamManagementFailed): Promise<void>;
     ack(): void;
     request(): void;
-    process(ack: StreamManagementAck | StreamManagementResume | StreamManagementFailed, resend?: boolean): Promise<void>;
-    track(kind: string, stanza: StreamManagementEnable | StreamManagementResume | Message | Presence | IQ): Promise<boolean>;
+    process(
+        ack: StreamManagementAck | StreamManagementResume | StreamManagementFailed,
+        resend?: boolean
+    ): Promise<void>;
+    track(
+        kind: string,
+        stanza: StreamManagementEnable | StreamManagementResume | Message | Presence | IQ
+    ): Promise<boolean>;
     handle(): Promise<void>;
     hibernate(): Promise<void>;
     shutdown(): Promise<void>;

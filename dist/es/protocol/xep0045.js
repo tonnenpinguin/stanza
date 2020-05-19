@@ -17,8 +17,35 @@
 // Source: https://xmpp.org/extensions/xep-0307.html
 // Version: 0.1 (2011-11-10)
 // ====================================================================
-import { addAlias, attribute, booleanAttribute, childAttribute, childBoolean, childEnum, childJIDAttribute, childText, dateAttribute, deepChildText, extendMessage, findAll, integerAttribute, JIDAttribute, multipleChildAttribute, splicePath, staticValue, text } from '../jxt';
-import { NS_DATAFORM, NS_MUC, NS_MUC_ADMIN, NS_MUC_DIRECT_INVITE, NS_MUC_OWNER, NS_MUC_UNIQUE, NS_MUC_USER } from '../Namespaces';
+import {
+    addAlias,
+    attribute,
+    booleanAttribute,
+    childAttribute,
+    childBoolean,
+    childEnum,
+    childJIDAttribute,
+    childText,
+    dateAttribute,
+    deepChildText,
+    extendMessage,
+    findAll,
+    integerAttribute,
+    JIDAttribute,
+    multipleChildAttribute,
+    splicePath,
+    staticValue,
+    text
+} from '../jxt';
+import {
+    NS_DATAFORM,
+    NS_MUC,
+    NS_MUC_ADMIN,
+    NS_MUC_DIRECT_INVITE,
+    NS_MUC_OWNER,
+    NS_MUC_UNIQUE,
+    NS_MUC_USER
+} from '../Namespaces';
 const Protocol = [
     addAlias(NS_DATAFORM, 'x', [{ path: 'iq.muc.form', selector: 'configure' }]),
     {
@@ -184,7 +211,10 @@ const Protocol = [
         legacyMUC: {
             exporter(xml, value, context) {
                 const out = context.registry
-                    ? context.registry.export('message.muc', Object.assign(Object.assign({}, value), { type: 'direct-invite' }))
+                    ? context.registry.export(
+                          'message.muc',
+                          Object.assign(Object.assign({}, value), { type: 'direct-invite' })
+                      )
                     : undefined;
                 if (out) {
                     xml.appendChild(out);
@@ -201,7 +231,10 @@ const Protocol = [
                     return;
                 }
                 return context.registry
-                    ? context.registry.import(confElement, Object.assign(Object.assign({}, context), { path: 'message' }))
+                    ? context.registry.import(
+                          confElement,
+                          Object.assign(Object.assign({}, context), { path: 'message' })
+                      )
                     : undefined;
             },
             importOrder: -1

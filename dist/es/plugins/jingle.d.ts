@@ -1,14 +1,23 @@
 import { Agent } from '../';
 import * as Jingle from '../jingle';
-import { ExternalServiceCredentials, ExternalServiceList, IQ, Jingle as JingleRequest } from '../protocol';
+import {
+    ExternalServiceCredentials,
+    ExternalServiceList,
+    IQ,
+    Jingle as JingleRequest
+} from '../protocol';
 declare module '../' {
     interface Agent {
         jingle: Jingle.SessionManager;
-        discoverICEServers(opts?: {
-            version?: '2' | '1';
-        }): Promise<RTCIceServer[]>;
+        discoverICEServers(opts?: { version?: '2' | '1' }): Promise<RTCIceServer[]>;
         getServices(jid: string, type?: string, version?: '2' | '1'): Promise<ExternalServiceList>;
-        getServiceCredentials(jid: string, host: string, type?: string, port?: number, version?: '2' | '1'): Promise<ExternalServiceCredentials>;
+        getServiceCredentials(
+            jid: string,
+            host: string,
+            type?: string,
+            port?: number,
+            version?: '2' | '1'
+        ): Promise<ExternalServiceCredentials>;
     }
     interface AgentEvents {
         'iq:set:jingle': IQ & {

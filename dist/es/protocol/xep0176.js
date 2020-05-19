@@ -16,7 +16,7 @@
 // ====================================================================
 import { attribute, childBoolean, integerAttribute } from '../jxt';
 import { NS_JINGLE_ICE_0, NS_JINGLE_ICE_UDP_1 } from '../Namespaces';
-const ice = (transportType) => [
+const ice = transportType => [
     {
         element: 'transport',
         fields: {

@@ -10,22 +10,22 @@ export default function (client) {
     client.disco.addFeature(NS_PEP_NOTIFY(NS_MOOD));
     client.disco.addFeature(NS_PEP_NOTIFY(NS_NICK));
     client.disco.addFeature(NS_PEP_NOTIFY(NS_TUNE));
-    client.publishActivity = (data) => {
+    client.publishActivity = data => {
         return client.publish('', NS_ACTIVITY, Object.assign({ itemType: NS_ACTIVITY }, data));
     };
-    client.publishGeoLoc = (data) => {
+    client.publishGeoLoc = data => {
         return client.publish('', NS_GEOLOC, Object.assign({ itemType: NS_GEOLOC }, data));
     };
-    client.publishMood = (mood) => {
+    client.publishMood = mood => {
         return client.publish('', NS_MOOD, Object.assign({ itemType: NS_MOOD }, mood));
     };
-    client.publishNick = (nick) => {
+    client.publishNick = nick => {
         return client.publish('', NS_NICK, {
             itemType: NS_NICK,
             nick
         });
     };
-    client.publishTune = (tune) => {
+    client.publishTune = tune => {
         return client.publish('', NS_TUNE, Object.assign({ itemType: NS_TUNE }, tune));
     };
     client.on('pubsub:published', msg => {

@@ -20,6 +20,10 @@ export interface DataFormLayoutFieldRef {
 export interface DataFormLayoutReportedRef {
     type: 'reportedref';
 }
-export declare type DataFormLayout = DataFormLayoutPageSection | DataFormLayoutText | DataFormLayoutFieldRef | DataFormLayoutReportedRef;
+export declare type DataFormLayout =
+    | DataFormLayoutPageSection
+    | DataFormLayoutText
+    | DataFormLayoutFieldRef
+    | DataFormLayoutReportedRef;
 declare const Protocol: DefinitionOptions[];
 export default Protocol;

@@ -6,7 +6,7 @@
  * Derived from:
  * - uuid, Copyright (c) 2010-2016 Robert Kieffer and other contributors
  */
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 // tslint:disable no-bitwise
 import { randomBytes } from 'stanza-shims';
 const bth = [];
@@ -39,35 +39,33 @@ export function octetCompare(str1, str2) {
     return b1.compare(b2);
 }
 export function uuid() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const buf = yield randomBytes(16);
-        // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-        buf[6] = (buf[6] & 0x0f) | 0x40;
-        buf[8] = (buf[8] & 0x3f) | 0x80;
-        let i = 0;
-        return [
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i++]],
-            '-',
-            bth[buf[i++]],
-            bth[buf[i++]],
-            '-',
-            bth[buf[i++]],
-            bth[buf[i++]],
-            '-',
-            bth[buf[i++]],
-            bth[buf[i++]],
-            '-',
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i++]],
-            bth[buf[i]]
-        ].join('');
-    });
+    const buf = randomBytes(16);
+    // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+    buf[6] = (buf[6] & 0x0f) | 0x40;
+    buf[8] = (buf[8] & 0x3f) | 0x80;
+    let i = 0;
+    return [
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i++]],
+        '-',
+        bth[buf[i++]],
+        bth[buf[i++]],
+        '-',
+        bth[buf[i++]],
+        bth[buf[i++]],
+        '-',
+        bth[buf[i++]],
+        bth[buf[i++]],
+        '-',
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i++]],
+        bth[buf[i]]
+    ].join('');
 }
 const DATE_FIELDS = new Set([
     'date',
@@ -86,10 +84,12 @@ export function reviveData(key, value) {
     if (DATE_FIELDS.has(key) && value && typeof value === 'string' && ISO_DT.test(value)) {
         return new Date(value);
     }
-    if (value &&
+    if (
+        value &&
         typeof value === 'object' &&
         value.type === 'Buffer' &&
-        Array.isArray(value.data)) {
+        Array.isArray(value.data)
+    ) {
         return Buffer.from(value);
     }
     return value;

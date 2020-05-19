@@ -1,14 +1,15 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { NS_VCARD_TEMP } from '../Namespaces';
 export default function (client) {
-    client.getAccountInfo = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            account: {},
-            to: jid,
-            type: 'get'
+    client.getAccountInfo = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                account: {},
+                to: jid,
+                type: 'get'
+            });
+            return resp.account;
         });
-        return resp.account;
-    });
     client.updateAccount = (jid, data) => {
         return client.sendIQ({
             account: data,
@@ -16,7 +17,7 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.deleteAccount = (jid) => {
+    client.deleteAccount = jid => {
         return client.sendIQ({
             account: {
                 remove: true
@@ -25,39 +26,43 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.getPrivateData = (key) => __awaiter(this, void 0, void 0, function* () {
-        const res = yield client.sendIQ({
-            privateStorage: {
-                [key]: {}
-            },
-            type: 'get'
+    client.getPrivateData = key =>
+        __awaiter(this, void 0, void 0, function* () {
+            const res = yield client.sendIQ({
+                privateStorage: {
+                    [key]: {}
+                },
+                type: 'get'
+            });
+            return res.privateStorage[key];
         });
-        return res.privateStorage[key];
-    });
-    client.setPrivateData = (key, value) => __awaiter(this, void 0, void 0, function* () {
-        return client.sendIQ({
-            privateStorage: {
-                [key]: value
-            },
-            type: 'set'
+    client.setPrivateData = (key, value) =>
+        __awaiter(this, void 0, void 0, function* () {
+            return client.sendIQ({
+                privateStorage: {
+                    [key]: value
+                },
+                type: 'set'
+            });
         });
-    });
-    client.getVCard = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            to: jid,
-            type: 'get',
-            vcard: {
-                format: NS_VCARD_TEMP
-            }
+    client.getVCard = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                to: jid,
+                type: 'get',
+                vcard: {
+                    format: NS_VCARD_TEMP
+                }
+            });
+            return resp.vcard;
         });
-        return resp.vcard;
-    });
-    client.publishVCard = (vcard) => __awaiter(this, void 0, void 0, function* () {
-        yield client.sendIQ({
-            type: 'set',
-            vcard
+    client.publishVCard = vcard =>
+        __awaiter(this, void 0, void 0, function* () {
+            yield client.sendIQ({
+                type: 'set',
+                vcard
+            });
         });
-    });
     client.enableNotifications = (jid, node, fieldList = []) => {
         return client.sendIQ({
             push: {

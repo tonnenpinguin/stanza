@@ -32,7 +32,11 @@ export interface DataFormFieldBoolean extends DataFormFieldBase {
     value?: boolean;
 }
 export interface DataFormFieldText extends DataFormFieldBase {
-    type: typeof DataFormFieldType.Fixed | typeof DataFormFieldType.Hidden | typeof DataFormFieldType.TextPrivate | typeof DataFormFieldType.Text;
+    type:
+        | typeof DataFormFieldType.Fixed
+        | typeof DataFormFieldType.Hidden
+        | typeof DataFormFieldType.TextPrivate
+        | typeof DataFormFieldType.Text;
     value?: string;
 }
 export interface DataFormFieldTextMulti extends DataFormFieldBase {
@@ -67,7 +71,15 @@ export interface DataFormFieldOption<T> {
     label?: string;
     value: T;
 }
-export declare type DataFormField = DataFormFieldBoolean | DataFormFieldText | DataFormFieldTextMulti | DataFormFieldList | DataFormFieldListMulti | DataFormFieldJID | DataFormFieldJIDMulti | DataFormFieldAny;
+export declare type DataFormField =
+    | DataFormFieldBoolean
+    | DataFormFieldText
+    | DataFormFieldTextMulti
+    | DataFormFieldList
+    | DataFormFieldListMulti
+    | DataFormFieldJID
+    | DataFormFieldJIDMulti
+    | DataFormFieldAny;
 export interface DataFormValidation {
     type: string;
     method: 'basic' | 'open' | 'range' | 'regex';

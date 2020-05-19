@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import * as JID from '../JID';
 import { NS_SHIM } from '../Namespaces';
 function isPubsubMessage(msg) {
@@ -64,57 +64,58 @@ export default function (client) {
             return;
         }
     });
-    client.subscribeToNode = (jid, opts) => __awaiter(this, void 0, void 0, function* () {
-        const subscribe = {};
-        let form;
-        if (typeof opts === 'string') {
-            subscribe.node = opts;
-            subscribe.jid = JID.toBare(client.jid);
-        }
-        else {
-            subscribe.node = opts.node;
-            subscribe.jid = opts.jid || (opts.useBareJID ? JID.toBare(client.jid) : client.jid);
-            form = opts.options;
-        }
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'user',
-                subscribe,
-                subscriptionOptions: form ? { form } : undefined
-            },
-            to: jid,
-            type: 'set'
+    client.subscribeToNode = (jid, opts) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const subscribe = {};
+            let form;
+            if (typeof opts === 'string') {
+                subscribe.node = opts;
+                subscribe.jid = JID.toBare(client.jid);
+            } else {
+                subscribe.node = opts.node;
+                subscribe.jid = opts.jid || (opts.useBareJID ? JID.toBare(client.jid) : client.jid);
+                form = opts.options;
+            }
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'user',
+                    subscribe,
+                    subscriptionOptions: form ? { form } : undefined
+                },
+                to: jid,
+                type: 'set'
+            });
+            const sub = resp.pubsub.subscription || {};
+            if (resp.pubsub.subscriptionOptions) {
+                sub.options = resp.pubsub.subscriptionOptions.form;
+            }
+            return sub;
         });
-        const sub = resp.pubsub.subscription || {};
-        if (resp.pubsub.subscriptionOptions) {
-            sub.options = resp.pubsub.subscriptionOptions.form;
-        }
-        return sub;
-    });
-    client.unsubscribeFromNode = (jid, opts) => __awaiter(this, void 0, void 0, function* () {
-        const unsubscribe = {};
-        if (typeof opts === 'string') {
-            unsubscribe.node = opts;
-            unsubscribe.jid = JID.toBare(client.jid);
-        }
-        else {
-            unsubscribe.node = opts.node;
-            unsubscribe.subid = opts.subid;
-            unsubscribe.jid = opts.jid || (opts.useBareJID ? JID.toBare(client.jid) : client.jid);
-        }
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'user',
-                unsubscribe
-            },
-            to: jid,
-            type: 'set'
+    client.unsubscribeFromNode = (jid, opts) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const unsubscribe = {};
+            if (typeof opts === 'string') {
+                unsubscribe.node = opts;
+                unsubscribe.jid = JID.toBare(client.jid);
+            } else {
+                unsubscribe.node = opts.node;
+                unsubscribe.subid = opts.subid;
+                unsubscribe.jid =
+                    opts.jid || (opts.useBareJID ? JID.toBare(client.jid) : client.jid);
+            }
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'user',
+                    unsubscribe
+                },
+                to: jid,
+                type: 'set'
+            });
+            if (!resp.pubsub || !resp.pubsub.subscription) {
+                return Object.assign(Object.assign({}, unsubscribe), { state: 'none' });
+            }
+            return resp.pubsub.subscription;
         });
-        if (!resp.pubsub || !resp.pubsub.subscription) {
-            return Object.assign(Object.assign({}, unsubscribe), { state: 'none' });
-        }
-        return resp.pubsub.subscription;
-    });
     client.publish = (jid, node, item, id) => {
         return client.sendIQ({
             pubsub: {
@@ -131,35 +132,37 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.getItem = (jid, node, id) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'user',
-                fetch: {
-                    items: [{ id }],
-                    node
-                }
-            },
-            to: jid,
-            type: 'get'
-        });
-        return resp.pubsub.fetch.items[0];
-    });
-    client.getItems = (jid, node, opts = {}) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'user',
-                fetch: {
-                    max: opts.max,
-                    node
+    client.getItem = (jid, node, id) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'user',
+                    fetch: {
+                        items: [{ id }],
+                        node
+                    }
                 },
-                paging: opts
-            },
-            to: jid,
-            type: 'get'
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.fetch.items[0];
         });
-        return resp.pubsub.fetch;
-    });
+    client.getItems = (jid, node, opts = {}) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'user',
+                    fetch: {
+                        max: opts.max,
+                        node
+                    },
+                    paging: opts
+                },
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.fetch;
+        });
     client.retract = (jid, node, id, notify) => {
         return client.sendIQ({
             pubsub: {
@@ -197,40 +200,42 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.createNode = (jid, node, config) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                configure: config
-                    ? {
-                        form: config
+    client.createNode = (jid, node, config) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    configure: config
+                        ? {
+                              form: config
+                          }
+                        : undefined,
+                    context: 'user',
+                    create: {
+                        node
                     }
-                    : undefined,
-                context: 'user',
-                create: {
+                },
+                to: jid,
+                type: 'set'
+            });
+            if (!resp.pubsub || !resp.pubsub.create) {
+                return {
                     node
-                }
-            },
-            to: jid,
-            type: 'set'
+                };
+            }
+            return resp.pubsub.create;
         });
-        if (!resp.pubsub || !resp.pubsub.create) {
-            return {
-                node
-            };
-        }
-        return resp.pubsub.create;
-    });
-    client.getSubscriptions = (jid, opts = {}) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'user',
-                subscriptions: opts
-            },
-            to: jid,
-            type: 'get'
+    client.getSubscriptions = (jid, opts = {}) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'user',
+                    subscriptions: opts
+                },
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.subscriptions;
         });
-        return resp.pubsub.subscriptions;
-    });
     client.getAffiliations = (jid, node) => {
         return client.sendIQ({
             pubsub: {
@@ -245,8 +250,7 @@ export default function (client) {
     client.getNodeSubscribers = (jid, node, opts = {}) => {
         if (typeof node === 'string') {
             opts.node = node;
-        }
-        else {
+        } else {
             opts = Object.assign(Object.assign({}, opts), node);
         }
         return client.sendIQ({
@@ -271,19 +275,20 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.getNodeAffiliations = (jid, node) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                affiliations: {
-                    node
+    client.getNodeAffiliations = (jid, node) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    affiliations: {
+                        node
+                    },
+                    context: 'owner'
                 },
-                context: 'owner'
-            },
-            to: jid,
-            type: 'get'
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.affiliations;
         });
-        return resp.pubsub.affiliations;
-    });
     client.updateNodeAffiliations = (jid, node, items) => {
         return client.sendIQ({
             pubsub: {
@@ -297,51 +302,55 @@ export default function (client) {
             type: 'set'
         });
     };
-    client.getNodeConfig = (jid, node) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                configure: {
-                    node
+    client.getNodeConfig = (jid, node) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    configure: {
+                        node
+                    },
+                    context: 'owner'
                 },
-                context: 'owner'
-            },
-            to: jid,
-            type: 'get'
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.configure.form || {};
         });
-        return resp.pubsub.configure.form || {};
-    });
-    client.getDefaultNodeConfig = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                context: 'owner',
-                defaultConfiguration: {}
-            },
-            to: jid,
-            type: 'get'
-        });
-        return resp.pubsub.defaultConfiguration.form || {};
-    });
-    client.configureNode = (jid, node, config) => __awaiter(this, void 0, void 0, function* () {
-        return client.sendIQ({
-            pubsub: {
-                configure: {
-                    form: config,
-                    node
+    client.getDefaultNodeConfig = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    context: 'owner',
+                    defaultConfiguration: {}
                 },
-                context: 'owner'
-            },
-            to: jid,
-            type: 'set'
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.defaultConfiguration.form || {};
         });
-    });
-    client.getDefaultSubscriptionOptions = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            pubsub: {
-                defaultSubscriptionOptions: {}
-            },
-            to: jid,
-            type: 'get'
+    client.configureNode = (jid, node, config) =>
+        __awaiter(this, void 0, void 0, function* () {
+            return client.sendIQ({
+                pubsub: {
+                    configure: {
+                        form: config,
+                        node
+                    },
+                    context: 'owner'
+                },
+                to: jid,
+                type: 'set'
+            });
         });
-        return resp.pubsub.defaultSubscriptionOptions.form || {};
-    });
+    client.getDefaultSubscriptionOptions = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                pubsub: {
+                    defaultSubscriptionOptions: {}
+                },
+                to: jid,
+                type: 'get'
+            });
+            return resp.pubsub.defaultSubscriptionOptions.form || {};
+        });
 }

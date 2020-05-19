@@ -12,15 +12,30 @@
 // Version: 1.0.1 (2018-03-05)
 // ====================================================================
 import { DataFormFieldType } from '../Constants';
-import { attribute, childAttribute, childBoolean, childEnum, childIntegerAttribute, childText, multipleChildText, splicePath } from '../jxt';
+import {
+    attribute,
+    childAttribute,
+    childBoolean,
+    childEnum,
+    childIntegerAttribute,
+    childText,
+    multipleChildText,
+    splicePath
+} from '../jxt';
 import { NS_DATAFORM, NS_DATAFORM_VALIDATION } from '../Namespaces';
 const Protocol = [
     {
         aliases: [{ path: 'message.forms', multiple: true }],
         element: 'x',
         fields: {
-            instructions: Object.assign(Object.assign({}, multipleChildText(null, 'instructions')), { exportOrder: 2 }),
-            reported: Object.assign(Object.assign({}, splicePath(null, 'reported', 'dataformField', true)), { exportOrder: 3 }),
+            instructions: Object.assign(
+                Object.assign({}, multipleChildText(null, 'instructions')),
+                { exportOrder: 2 }
+            ),
+            reported: Object.assign(
+                Object.assign({}, splicePath(null, 'reported', 'dataformField', true)),
+                { exportOrder: 3 }
+            ),
             title: Object.assign(Object.assign({}, childText(null, 'title')), { exportOrder: 1 }),
             type: attribute('type')
         },
@@ -40,7 +55,9 @@ const Protocol = [
             description: childText(null, 'desc'),
             label: attribute('label'),
             name: attribute('var'),
-            rawValues: Object.assign(Object.assign({}, multipleChildText(null, 'value')), { exporter: () => null }),
+            rawValues: Object.assign(Object.assign({}, multipleChildText(null, 'value')), {
+                exporter: () => null
+            }),
             required: childBoolean(null, 'required'),
             type: attribute('type'),
             value: {
@@ -72,28 +89,30 @@ const Protocol = [
                 exporter(xml, data, context) {
                     const converter = multipleChildText(null, 'value');
                     let outputData = [];
-                    const rawData = context.data && context.data.rawValues
-                        ? context.data.rawValues[0]
-                        : undefined;
+                    const rawData =
+                        context.data && context.data.rawValues
+                            ? context.data.rawValues[0]
+                            : undefined;
                     if (typeof data === 'boolean') {
                         if (rawData === 'true' || rawData === 'false') {
                             outputData = [rawData];
-                        }
-                        else {
+                        } else {
                             outputData = [data ? '1' : '0'];
                         }
-                    }
-                    else if (!Array.isArray(data)) {
+                    } else if (!Array.isArray(data)) {
                         outputData = [data.toString()];
-                    }
-                    else {
+                    } else {
                         for (const value of data) {
                             outputData.push(value.toString());
                         }
                     }
-                    converter.exporter(xml, outputData, Object.assign({}, context, {
-                        namespace: NS_DATAFORM
-                    }));
+                    converter.exporter(
+                        xml,
+                        outputData,
+                        Object.assign({}, context, {
+                            namespace: NS_DATAFORM
+                        })
+                    );
                 }
             }
         },

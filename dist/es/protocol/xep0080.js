@@ -11,7 +11,14 @@
 // Source: https://xmpp.org/extensions/xep-0350.html
 // Version: 0.2 (2017-09-11)
 // ====================================================================
-import { childDate, childFloat, childText, childTimezoneOffset, languageAttribute, pubsubItemContentAliases } from '../jxt';
+import {
+    childDate,
+    childFloat,
+    childText,
+    childTimezoneOffset,
+    languageAttribute,
+    pubsubItemContentAliases
+} from '../jxt';
 import { NS_GEOLOC } from '../Namespaces';
 const Protocol = {
     aliases: [

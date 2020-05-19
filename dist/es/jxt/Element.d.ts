@@ -16,7 +16,11 @@ export default class XMLElement {
     optionalNamespaces: {
         [ns: string]: string;
     };
-    constructor(name: string, attrs?: Attributes, children?: Array<XMLElement | JSONElement | string>);
+    constructor(
+        name: string,
+        attrs?: Attributes,
+        children?: Array<XMLElement | JSONElement | string>
+    );
     getName(): string;
     getNamespace(): string;
     getNamespaceContext(): {

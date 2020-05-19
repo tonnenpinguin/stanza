@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 export default function (client) {
     client.features = {
         handlers: Object.create(null),
@@ -14,59 +14,59 @@ export default function (client) {
         this.features.order.sort((a, b) => a.priority - b.priority);
         this.features.handlers[name] = handler.bind(client);
     };
-    client.on('features', (features) => __awaiter(this, void 0, void 0, function* () {
-        const negotiated = client.features.negotiated;
-        const handlers = client.features.handlers;
-        const processingOrder = [];
-        for (const { name } of client.features.order) {
-            if (features[name] && handlers[name] && !negotiated[name]) {
-                processingOrder.push(name);
-            }
-        }
-        function processFeature(featureName) {
-            return new Promise(resolve => {
-                handlers[featureName](features, (command, message) => {
-                    if (command) {
-                        resolve({ command, message });
-                    }
-                    else {
-                        resolve();
-                    }
-                });
-            });
-        }
-        for (const item of processingOrder) {
-            if (negotiated[item]) {
-                continue;
-            }
-            let cmd = '';
-            let msg = '';
-            try {
-                const res = yield processFeature(item);
-                if (res) {
-                    cmd = res.command;
-                    msg = res.message || '';
+    client.on('features', features =>
+        __awaiter(this, void 0, void 0, function* () {
+            const negotiated = client.features.negotiated;
+            const handlers = client.features.handlers;
+            const processingOrder = [];
+            for (const { name } of client.features.order) {
+                if (features[name] && handlers[name] && !negotiated[name]) {
+                    processingOrder.push(name);
                 }
             }
-            catch (err) {
-                cmd = 'disconnect';
-                msg = err.message;
-                console.error(err);
-            }
-            if (!cmd) {
-                continue;
-            }
-            if (cmd === 'restart' && client.transport) {
-                client.transport.restart();
-            }
-            if (cmd === 'disconnect') {
-                client.emit('stream:error', {
-                    condition: 'policy-violation',
-                    text: 'Failed to negotiate stream features: ' + msg
+            function processFeature(featureName) {
+                return new Promise(resolve => {
+                    handlers[featureName](features, (command, message) => {
+                        if (command) {
+                            resolve({ command, message });
+                        } else {
+                            resolve();
+                        }
+                    });
                 });
-                client.disconnect();
             }
-            return;
-        }
-    }));
+            for (const item of processingOrder) {
+                if (negotiated[item]) {
+                    continue;
+                }
+                let cmd = '';
+                let msg = '';
+                try {
+                    const res = yield processFeature(item);
+                    if (res) {
+                        cmd = res.command;
+                        msg = res.message || '';
+                    }
+                } catch (err) {
+                    cmd = 'disconnect';
+                    msg = err.message;
+                    console.error(err);
+                }
+                if (!cmd) {
+                    continue;
+                }
+                if (cmd === 'restart' && client.transport) {
+                    client.transport.restart();
+                }
+                if (cmd === 'disconnect') {
+                    client.emit('stream:error', {
+                        condition: 'policy-violation',
+                        text: 'Failed to negotiate stream features: ' + msg
+                    });
+                    client.disconnect();
+                }
+                return;
+            }
+        })
+    );
 }

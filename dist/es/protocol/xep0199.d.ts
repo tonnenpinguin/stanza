@@ -3,5 +3,5 @@ declare module './' {
         ping?: boolean;
     }
 }
-declare const _default: import("../jxt").DefinitionOptions;
+declare const _default: import('../jxt').DefinitionOptions;
 export default _default;

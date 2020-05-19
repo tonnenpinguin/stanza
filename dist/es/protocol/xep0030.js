@@ -11,7 +11,13 @@
 // Source: https://xmpp.org/extensions/xep-0128.html
 // Version: 1.0 (2004-10-20)
 // ====================================================================
-import { addAlias, attribute, JIDAttribute, languageAttribute, multipleChildAttribute } from '../jxt';
+import {
+    addAlias,
+    attribute,
+    JIDAttribute,
+    languageAttribute,
+    multipleChildAttribute
+} from '../jxt';
 import { NS_DATAFORM, NS_DISCO_INFO, NS_DISCO_ITEMS, NS_RSM } from '../Namespaces';
 const Protocol = [
     {

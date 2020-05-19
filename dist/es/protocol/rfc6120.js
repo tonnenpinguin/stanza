@@ -3,9 +3,32 @@
 // --------------------------------------------------------------------
 // Source: https://tools.ietf.org/html/rfc6120
 // ====================================================================
-import { SASLFailureCondition, StanzaErrorCondition, StreamErrorCondition, StreamType } from '../Constants';
-import { attribute, childAlternateLanguageText, childBoolean, childEnum, childText, JIDAttribute, languageAttribute, multipleChildText, textBuffer } from '../jxt';
-import { NS_BIND, NS_CLIENT, NS_SASL, NS_STANZAS, NS_STARTTLS, NS_STREAM, NS_STREAMS } from '../Namespaces';
+import {
+    SASLFailureCondition,
+    StanzaErrorCondition,
+    StreamErrorCondition,
+    StreamType
+} from '../Constants';
+import {
+    attribute,
+    childAlternateLanguageText,
+    childBoolean,
+    childEnum,
+    childText,
+    JIDAttribute,
+    languageAttribute,
+    multipleChildText,
+    textBuffer
+} from '../jxt';
+import {
+    NS_BIND,
+    NS_CLIENT,
+    NS_SASL,
+    NS_STANZAS,
+    NS_STARTTLS,
+    NS_STREAM,
+    NS_STREAMS
+} from '../Namespaces';
 const _Stream = {
     defaultType: 'stream',
     element: 'stream',
@@ -30,7 +53,11 @@ const _StreamError = {
     element: 'error',
     fields: {
         alternateLanguageText: childAlternateLanguageText(NS_STREAMS, 'text'),
-        condition: childEnum(NS_STREAMS, Object.values(StreamErrorCondition), StreamErrorCondition.UndefinedCondition),
+        condition: childEnum(
+            NS_STREAMS,
+            Object.values(StreamErrorCondition),
+            StreamErrorCondition.UndefinedCondition
+        ),
         seeOtherHost: childText(NS_STREAMS, StreamErrorCondition.SeeOtherHost),
         text: childText(NS_STREAMS, 'text')
     },
@@ -45,7 +72,11 @@ const _StanzaError = Object.values(StreamType).map(streamNS => ({
     fields: {
         alternateLanguageText: childAlternateLanguageText(NS_STANZAS, 'text'),
         by: JIDAttribute('by'),
-        condition: childEnum(NS_STANZAS, Object.values(StanzaErrorCondition), StanzaErrorCondition.UndefinedCondition),
+        condition: childEnum(
+            NS_STANZAS,
+            Object.values(StanzaErrorCondition),
+            StanzaErrorCondition.UndefinedCondition
+        ),
         gone: childText(NS_STANZAS, StanzaErrorCondition.Gone),
         redirect: childText(NS_STANZAS, StanzaErrorCondition.Redirect),
         text: childText(NS_STANZAS, 'text'),
@@ -57,7 +88,7 @@ const _StanzaError = Object.values(StreamType).map(streamNS => ({
 }));
 // --------------------------------------------------------------------
 const baseIQFields = new Set(['from', 'id', 'lang', 'to', 'type', 'payloadType', 'error']);
-const _IQ = Object.values(StreamType).map((streamNS) => ({
+const _IQ = Object.values(StreamType).map(streamNS => ({
     childrenExportOrder: {
         error: 200000
     },
@@ -70,12 +101,10 @@ const _IQ = Object.values(StreamType).map((streamNS) => ({
         payloadType: {
             order: -10000,
             importer(xml, context) {
-                if (context.data.type !== 'get' &&
-                    context.data.type !== 'set') {
+                if (context.data.type !== 'get' && context.data.type !== 'set') {
                     return;
                 }
-                const childCount = xml.children.filter(child => typeof child !== 'string')
-                    .length;
+                const childCount = xml.children.filter(child => typeof child !== 'string').length;
                 if (childCount !== 1) {
                     return 'invalid-payload-count';
                 }

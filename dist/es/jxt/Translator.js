@@ -111,13 +111,12 @@ export default class Translator {
         const type = opts.type || this.defaultType;
         const version = opts.version || this.defaultVersion;
         const versionType = version ? `${type}__v__${version}` : type;
-        const importer = this.importers.get(xid) ||
-            {
-                element: opts.element,
-                fieldOrders: new Map(),
-                fields: new Map(),
-                namespace: opts.namespace
-            };
+        const importer = this.importers.get(xid) || {
+            element: opts.element,
+            fieldOrders: new Map(),
+            fields: new Map(),
+            namespace: opts.namespace
+        };
         for (const [fieldName, fieldImporter] of opts.importers) {
             importer.fields.set(fieldName, fieldImporter);
         }
@@ -125,14 +124,13 @@ export default class Translator {
             importer.fieldOrders.set(fieldName, order);
         }
         this.importers.set(xid, importer);
-        const exporter = this.exporters.get(versionType) ||
-            {
-                element: opts.element,
-                fieldOrders: new Map(),
-                fields: new Map(),
-                namespace: opts.namespace,
-                optionalNamespaces: opts.optionalNamespaces
-            };
+        const exporter = this.exporters.get(versionType) || {
+            element: opts.element,
+            fieldOrders: new Map(),
+            fields: new Map(),
+            namespace: opts.namespace,
+            optionalNamespaces: opts.optionalNamespaces
+        };
         for (const [fieldName, fieldExporter] of opts.exporters) {
             exporter.fields.set(fieldName, fieldExporter);
         }
@@ -169,8 +167,7 @@ export default class Translator {
             if (opts.typeOrder && opts.type) {
                 this.typeOrders.set(opts.type, opts.typeOrder);
             }
-        }
-        else if (this.typeField && !opts.type) {
+        } else if (this.typeField && !opts.type) {
             for (const [, imp] of this.importers) {
                 for (const [fieldName, fieldImporter] of opts.importers) {
                     imp.fields.set(fieldName, fieldImporter);
@@ -235,15 +232,22 @@ export default class Translator {
                     output[implied.typeField] = impliedTypeValue;
                 }
             }
-        }
-        else if (this.typeField && typeValue && typeValue !== this.defaultType) {
+        } else if (this.typeField && typeValue && typeValue !== this.defaultType) {
             output[this.typeField] = typeValue;
         }
         if (this.versionField && versionValue && versionValue !== this.defaultVersion) {
             output[this.versionField] = versionValue;
         }
-        const context = Object.assign(Object.assign({}, parentContext), { data: output, importer, lang: (xml.getAttribute('xml:lang') || parentContext.lang || '').toLowerCase(), pathSelector: typeValue, translator: this });
-        const importFields = [...importer.fieldOrders.entries()].sort((a, b) => a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0);
+        const context = Object.assign(Object.assign({}, parentContext), {
+            data: output,
+            importer,
+            lang: (xml.getAttribute('xml:lang') || parentContext.lang || '').toLowerCase(),
+            pathSelector: typeValue,
+            translator: this
+        });
+        const importFields = [...importer.fieldOrders.entries()].sort((a, b) =>
+            a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0
+        );
         const preChildren = importFields.filter(field => field[1] >= 0);
         const postChildren = importFields.filter(field => field[1] < 0);
         for (const [fieldName] of preChildren) {
@@ -273,12 +277,13 @@ export default class Translator {
                             output[fieldName] = [];
                         }
                         output[fieldName].push(childOutput);
-                    }
-                    else if (!output[fieldName]) {
+                    } else if (!output[fieldName]) {
                         output[fieldName] = childOutput;
-                    }
-                    else {
-                        output[fieldName] = translator.resolveCollision(output[fieldName], childOutput);
+                    } else {
+                        output[fieldName] = translator.resolveCollision(
+                            output[fieldName],
+                            childOutput
+                        );
                     }
                 }
             }
@@ -309,8 +314,7 @@ export default class Translator {
         }
         if (implied) {
             exportType = implied.impliedType || data[implied.typeField] || this.defaultType;
-        }
-        else if (this.typeField) {
+        } else if (this.typeField) {
             exportType = data[this.typeField] || this.defaultType;
         }
         if (this.versionField) {
@@ -321,14 +325,27 @@ export default class Translator {
         if (!exporter) {
             return;
         }
-        const output = createElement(exporter.namespace, exporter.element, parentContext.namespace, parentContext.element);
+        const output = createElement(
+            exporter.namespace,
+            exporter.element,
+            parentContext.namespace,
+            parentContext.element
+        );
         if (parentContext.element) {
             output.parent = parentContext.element;
         }
         for (const [prefix, namespace] of exporter.optionalNamespaces) {
             output.addOptionalNamespace(prefix, namespace);
         }
-        const context = Object.assign(Object.assign({}, parentContext), { data, element: output, exporter, lang: (data[this.languageField] || parentContext.lang || '').toLowerCase(), namespace: output.getDefaultNamespace(), pathSelector: exportType, translator: this });
+        const context = Object.assign(Object.assign({}, parentContext), {
+            data,
+            element: output,
+            exporter,
+            lang: (data[this.languageField] || parentContext.lang || '').toLowerCase(),
+            namespace: output.getDefaultNamespace(),
+            pathSelector: exportType,
+            translator: this
+        });
         const langExporter = exporter.fields.get(this.languageField);
         if (langExporter) {
             langExporter(output, data[this.languageField], parentContext);
@@ -360,8 +377,7 @@ export default class Translator {
                 let items;
                 if (multiple) {
                     items = value;
-                }
-                else {
+                } else {
                     items = [value];
                 }
                 for (const item of items) {
@@ -375,7 +391,8 @@ export default class Translator {
         return output;
     }
     resolveCollision(existingData, newData) {
-        const existingOrder = this.typeOrders.get(existingData[this.typeField] || this.defaultType) || 0;
+        const existingOrder =
+            this.typeOrders.get(existingData[this.typeField] || this.defaultType) || 0;
         const newOrder = this.typeOrders.get(newData[this.typeField] || this.defaultType) || 0;
         return existingOrder <= newOrder ? existingData : newData;
     }

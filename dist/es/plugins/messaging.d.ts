@@ -1,5 +1,12 @@
 import { Agent } from '../';
-import { CarbonMessage, DataForm, Message, MessageReceipt, ReceivedMessage, RTT } from '../protocol';
+import {
+    CarbonMessage,
+    DataForm,
+    Message,
+    MessageReceipt,
+    ReceivedMessage,
+    RTT
+} from '../protocol';
 declare module '../' {
     interface Agent {
         getAttention(jid: string, opts?: Partial<Message>): void;

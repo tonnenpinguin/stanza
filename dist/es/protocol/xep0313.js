@@ -16,57 +16,62 @@ const Protocol = [
     addAlias(NS_RSM, 'set', ['iq.archive.paging'])
 ];
 for (const [version, namespace] of Object.entries(versions)) {
-    Protocol.push({
-        defaultType: 'query',
-        defaultVersion: '2',
-        element: 'query',
-        fields: {
-            queryId: attribute('queryid')
+    Protocol.push(
+        {
+            defaultType: 'query',
+            defaultVersion: '2',
+            element: 'query',
+            fields: {
+                queryId: attribute('queryid')
+            },
+            namespace,
+            path: 'iq.archive',
+            type: 'query',
+            typeField: 'type',
+            version,
+            versionField: 'version'
         },
-        namespace,
-        path: 'iq.archive',
-        type: 'query',
-        typeField: 'type',
-        version,
-        versionField: 'version'
-    }, {
-        element: 'fin',
-        fields: {
-            complete: booleanAttribute('complete'),
-            stable: booleanAttribute('stable')
+        {
+            element: 'fin',
+            fields: {
+                complete: booleanAttribute('complete'),
+                stable: booleanAttribute('stable')
+            },
+            namespace,
+            path: 'iq.archive',
+            type: 'result',
+            version
         },
-        namespace,
-        path: 'iq.archive',
-        type: 'result',
-        version
-    }, {
-        element: 'prefs',
-        fields: {
-            default: attribute('default'),
-            always: deepMultipleChildText([
-                { namespace: null, element: 'always' },
-                { namespace: null, element: 'jid' }
-            ]),
-            never: deepMultipleChildText([
-                { namespace: null, element: 'never' },
-                { namespace: null, element: 'jid' }
-            ])
+        {
+            element: 'prefs',
+            fields: {
+                default: attribute('default'),
+                always: deepMultipleChildText([
+                    { namespace: null, element: 'always' },
+                    { namespace: null, element: 'jid' }
+                ]),
+                never: deepMultipleChildText([
+                    { namespace: null, element: 'never' },
+                    { namespace: null, element: 'jid' }
+                ])
+            },
+            namespace,
+            path: 'iq.archive',
+            type: 'preferences',
+            version
         },
-        namespace,
-        path: 'iq.archive',
-        type: 'preferences',
-        version
-    }, {
-        element: 'result',
-        defaultType: '2',
-        fields: {
-            id: attribute('id'),
-            queryId: attribute('queryid')
-        },
-        namespace,
-        path: 'message.archive',
-        type: version,
-        typeField: 'version'
-    });
+        {
+            element: 'result',
+            defaultType: '2',
+            fields: {
+                id: attribute('id'),
+                queryId: attribute('queryid')
+            },
+            namespace,
+            path: 'message.archive',
+            type: version,
+            typeField: 'version'
+        }
+    );
 }
 export default Protocol;

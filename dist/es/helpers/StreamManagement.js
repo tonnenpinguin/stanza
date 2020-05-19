@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { EventEmitter } from 'events';
 const MAX_SEQ = Math.pow(2, 32);
 const mod = (v, n) => ((v % n) + n) % n;
@@ -184,8 +184,7 @@ export default class StreamManagement extends EventEmitter {
                     lastAck: this.lastAck,
                     unacked: this.unacked
                 });
-            }
-            catch (err) {
+            } catch (err) {
                 // TODO: Is there a good way to handle this?
                 // istanbul ignore next
                 console.error('Failed to cache stream state', err);

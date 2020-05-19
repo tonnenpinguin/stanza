@@ -32,7 +32,13 @@ export interface VCardTempLogo {
     mediaType?: string;
     url?: string;
 }
-declare type VCardTempAddressType = 'home' | 'work' | 'domestic' | 'international' | 'postal' | 'parcel';
+declare type VCardTempAddressType =
+    | 'home'
+    | 'work'
+    | 'domestic'
+    | 'international'
+    | 'postal'
+    | 'parcel';
 export interface VCardTempAddress {
     type: 'address';
     city?: string;
@@ -74,7 +80,20 @@ export interface VCardTempCategories {
     type: 'categories';
     value: string[];
 }
-declare type VCardFieldType = 'nickname' | 'birthday' | 'jid' | 'url' | 'title' | 'role' | 'description' | 'sort' | 'revision' | 'uid' | 'productId' | 'note' | 'timezone';
+declare type VCardFieldType =
+    | 'nickname'
+    | 'birthday'
+    | 'jid'
+    | 'url'
+    | 'title'
+    | 'role'
+    | 'description'
+    | 'sort'
+    | 'revision'
+    | 'uid'
+    | 'productId'
+    | 'note'
+    | 'timezone';
 export interface VCardTempField {
     type: VCardFieldType;
     value: string;
@@ -84,6 +103,15 @@ export interface VCardTempOrg {
     value?: string;
     units?: string[];
 }
-export declare type VCardTempRecord = VCardTempPhoto | VCardTempAddress | VCardTempAddressLabel | VCardTempPhone | VCardTempEmail | VCardTempOrg | VCardTempLogo | VCardTempCategories | VCardTempField;
+export declare type VCardTempRecord =
+    | VCardTempPhoto
+    | VCardTempAddress
+    | VCardTempAddressLabel
+    | VCardTempPhone
+    | VCardTempEmail
+    | VCardTempOrg
+    | VCardTempLogo
+    | VCardTempCategories
+    | VCardTempField;
 declare const Protocol: DefinitionOptions[];
 export default Protocol;

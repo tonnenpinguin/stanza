@@ -10,9 +10,20 @@ export declare type XName = string;
 export declare type Type = string;
 export declare type Version = string;
 export declare type VersionType = string;
-export declare type FieldImporter<T = any> = (xml: XMLElement, context: TranslationContext) => T | undefined;
-export declare type FieldExporter<T = any> = (xml: XMLElement, data: T, context: TranslationContext) => void;
-export declare type LanguageResolver = (availableLanguages: string[], acceptLanguages: string[], currentLanguage?: string) => string;
+export declare type FieldImporter<T = any> = (
+    xml: XMLElement,
+    context: TranslationContext
+) => T | undefined;
+export declare type FieldExporter<T = any> = (
+    xml: XMLElement,
+    data: T,
+    context: TranslationContext
+) => void;
+export declare type LanguageResolver = (
+    availableLanguages: string[],
+    acceptLanguages: string[],
+    currentLanguage?: string
+) => string;
 export interface FieldDefinition<T = any, E = T> {
     order?: number;
     importOrder?: number;
@@ -120,4 +131,8 @@ export declare type LanguageSet<T> = Array<LanguageValue<T>>;
 export declare function escapeXML(text: string): string;
 export declare function unescapeXML(text: string): string;
 export declare function escapeXMLText(text: string): string;
-export declare function basicLanguageResolver(available: string[], accept?: string[], current?: string): string;
+export declare function basicLanguageResolver(
+    available: string[],
+    accept?: string[],
+    current?: string
+): string;

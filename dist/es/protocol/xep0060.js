@@ -5,9 +5,29 @@
 // Version: 1.15.1 (2018-02-02)
 // ====================================================================
 import { PubsubErrorCondition } from '../Constants';
-import { addAlias, attribute, booleanAttribute, childAttribute, childBoolean, childEnum, deepChildBoolean, extendStanzaError, integerAttribute, JIDAttribute, multipleChildAttribute, splicePath } from '../jxt';
-import { NS_DATAFORM, NS_PUBSUB, NS_PUBSUB_ERRORS, NS_PUBSUB_EVENT, NS_PUBSUB_OWNER, NS_RSM } from '../Namespaces';
-const dateOrPresenceAttribute = (name) => ({
+import {
+    addAlias,
+    attribute,
+    booleanAttribute,
+    childAttribute,
+    childBoolean,
+    childEnum,
+    deepChildBoolean,
+    extendStanzaError,
+    integerAttribute,
+    JIDAttribute,
+    multipleChildAttribute,
+    splicePath
+} from '../jxt';
+import {
+    NS_DATAFORM,
+    NS_PUBSUB,
+    NS_PUBSUB_ERRORS,
+    NS_PUBSUB_EVENT,
+    NS_PUBSUB_OWNER,
+    NS_RSM
+} from '../Namespaces';
+const dateOrPresenceAttribute = name => ({
     importer(xml) {
         const data = xml.getAttribute(name);
         if (data === 'presence') {
@@ -21,8 +41,7 @@ const dateOrPresenceAttribute = (name) => ({
         let data;
         if (typeof value === 'string') {
             data = value;
-        }
-        else {
+        } else {
             data = value.toISOString();
         }
         xml.setAttribute(name, data);

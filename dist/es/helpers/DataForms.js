@@ -12,8 +12,7 @@ export function mergeFields(original, updated) {
         if (field.name && mappedUpdates.has(field.name)) {
             merged.push(Object.assign(Object.assign({}, field), mappedUpdates.get(field.name)));
             usedUpdates.add(field.name);
-        }
-        else {
+        } else {
             merged.push(Object.assign({}, field));
         }
     }

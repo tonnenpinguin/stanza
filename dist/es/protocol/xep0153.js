@@ -16,8 +16,7 @@ export default extendPresence({
             const photo = findAll(update[0], NS_VCARD_TEMP_UPDATE, 'photo');
             if (photo.length) {
                 return photo[0].getText();
-            }
-            else {
+            } else {
                 return true;
             }
         },
@@ -25,11 +24,9 @@ export default extendPresence({
             const update = findOrCreate(xml, NS_VCARD_TEMP_UPDATE, 'x');
             if (value === '') {
                 findOrCreate(update, NS_VCARD_TEMP_UPDATE, 'photo');
-            }
-            else if (value === true) {
+            } else if (value === true) {
                 return;
-            }
-            else if (value) {
+            } else if (value) {
                 const photo = findOrCreate(update, NS_VCARD_TEMP_UPDATE, 'photo');
                 photo.children.push(value);
             }

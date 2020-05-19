@@ -48,7 +48,7 @@ const CSS_RULES = new Map([
     //  margin-right
     //  text-align
 ]);
-const sanitizeCSS = (css) => {
+const sanitizeCSS = css => {
     const declarations = `;${css}` // Declarations are ; delimited, not terminated
         .replace(/\/\*[^*]*\*+([^/*][^*]*\*+)*\//g, '') // Strip comments
         .replace(/\/\*.*/, '') // Strip unclosed comments
@@ -76,11 +76,13 @@ const sanitizeCSS = (css) => {
     }
     return false;
 };
-const sanitizeURL = (url) => {
-    return (!!url.match(/^(https?|xmpp|cid|mailto|ftps?|im|ircs?|sips?|tel|geo|bitcoin|magnet):/i) &&
-        url);
+const sanitizeURL = url => {
+    return (
+        !!url.match(/^(https?|xmpp|cid|mailto|ftps?|im|ircs?|sips?|tel|geo|bitcoin|magnet):/i) &&
+        url
+    );
 };
-const sanitizeNumber = (num) => {
+const sanitizeNumber = num => {
     return !!num.match(/^[0-9]*$/) && num;
 };
 const ATTRIBUTE_SANITIZERS = {
@@ -96,14 +98,12 @@ function stripElement(input) {
     for (const child of input.children) {
         if (typeof child === 'string') {
             results.push(child);
-        }
-        else {
+        } else {
             const sanitized = sanitizeInterior(child);
             if (sanitized) {
                 if (Array.isArray(sanitized)) {
                     results = results.concat(sanitized);
-                }
-                else {
+                } else {
                     results.push(sanitized);
                 }
             }
@@ -121,9 +121,7 @@ function sanitizeInterior(input) {
         }
         return stripElement(input);
     }
-    const children = input.children
-        .map(sanitizeInterior)
-        .filter(child => child !== undefined);
+    const children = input.children.map(sanitizeInterior).filter(child => child !== undefined);
     const attributes = {};
     for (const [key, value] of Object.entries(input.attributes)) {
         const allowed = ALLOWED_ATTRIBUTES.get(input.name);
@@ -161,8 +159,7 @@ function sanitizeRoot(input) {
         const sanitized = sanitizeInterior(child);
         if (Array.isArray(sanitized)) {
             children = children.concat(sanitized);
-        }
-        else if (sanitized) {
+        } else if (sanitized) {
             children.push(sanitized);
         }
     }

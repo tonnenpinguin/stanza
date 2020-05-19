@@ -4,7 +4,15 @@
 // Source: https://xmpp.org/extensions/xep-0033.html
 // Version:	1.2.1 (2017-01-11)
 // --------------------------------------------------------------------
-import { attribute, booleanAttribute, childAlternateLanguageText, extendMessage, extendPresence, JIDAttribute, splicePath } from '../jxt';
+import {
+    attribute,
+    booleanAttribute,
+    childAlternateLanguageText,
+    extendMessage,
+    extendPresence,
+    JIDAttribute,
+    splicePath
+} from '../jxt';
 import { NS_ADDRESS } from '../Namespaces';
 const Protocol = [
     extendMessage({

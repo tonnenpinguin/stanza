@@ -4,7 +4,13 @@
 // Source: https://xmpp.org/extensions/xep-0048.html
 // Version: 1.1 (2007-11-07)
 // ====================================================================
-import { attribute, booleanAttribute, childText, JIDAttribute, pubsubItemContentAliases } from '../jxt';
+import {
+    attribute,
+    booleanAttribute,
+    childText,
+    JIDAttribute,
+    pubsubItemContentAliases
+} from '../jxt';
 import { NS_BOOKMARKS } from '../Namespaces';
 const Protocol = [
     {

@@ -3,5 +3,5 @@ declare module './' {
         replace?: string;
     }
 }
-declare const _default: import("../jxt").DefinitionOptions;
+declare const _default: import('../jxt').DefinitionOptions;
 export default _default;

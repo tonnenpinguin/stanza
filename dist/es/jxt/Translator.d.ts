@@ -1,4 +1,17 @@
-import { ChildTranslator, DefinitionUpdateOptions, Exporter, FieldName, Importer, JSONData, PathContext, TranslationContext, Type, XName, VersionType, Version } from './Definitions';
+import {
+    ChildTranslator,
+    DefinitionUpdateOptions,
+    Exporter,
+    FieldName,
+    Importer,
+    JSONData,
+    PathContext,
+    TranslationContext,
+    Type,
+    XName,
+    VersionType,
+    Version
+} from './Definitions';
 import XMLElement from './Element';
 export default class Translator {
     placeholder: boolean;
@@ -17,8 +30,21 @@ export default class Translator {
     contexts: Map<string, PathContext>;
     parents: Set<Translator>;
     constructor();
-    addChild(name: FieldName, translator: Translator, multiple?: boolean, selector?: string, implicit?: string): void;
-    addContext(path: string, selector: string | undefined, field: FieldName | undefined, xid: XName, value: Type, implied: boolean): void;
+    addChild(
+        name: FieldName,
+        translator: Translator,
+        multiple?: boolean,
+        selector?: string,
+        implicit?: string
+    ): void;
+    addContext(
+        path: string,
+        selector: string | undefined,
+        field: FieldName | undefined,
+        xid: XName,
+        value: Type,
+        implied: boolean
+    ): void;
     getChild(name: FieldName): Translator | undefined;
     getImportKey(xml: XMLElement): string | undefined;
     updateDefinition(opts: DefinitionUpdateOptions): void;

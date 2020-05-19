@@ -31,7 +31,10 @@ export default class Registry {
             };
         }
         const translator = this.getOrCreateTranslator(xml.getNamespace(), xml.getName());
-        return translator.import(xml, Object.assign(Object.assign({}, context), { registry: this }));
+        return translator.import(
+            xml,
+            Object.assign(Object.assign({}, context), { registry: this })
+        );
     }
     export(path, data, context = { registry: this }) {
         if (!context.acceptLanguages) {
@@ -58,7 +61,10 @@ export default class Registry {
             }
             translator = nextTranslator;
         }
-        return translator.export(data, Object.assign(Object.assign({}, context), { registry: this }));
+        return translator.export(
+            data,
+            Object.assign(Object.assign({}, context), { registry: this })
+        );
     }
     getImportKey(xml, path = '') {
         const root = !path ? this.root : this.walkToTranslator(path.split('.'));
@@ -72,14 +78,12 @@ export default class Registry {
             for (const def of defs) {
                 if (typeof def === 'object') {
                     this.define(def);
-                }
-                else {
+                } else {
                     def(this);
                 }
             }
             return;
-        }
-        else if (typeof defs !== 'object') {
+        } else if (typeof defs !== 'object') {
             defs(this);
             return;
         }
@@ -91,10 +95,10 @@ export default class Registry {
         const aliases = definition.aliases
             .map(alias => (typeof alias === 'string' ? { path: alias } : alias))
             .sort((a, b) => {
-            const aLen = a.path.split('.').length;
-            const bLen = b.path.split('.').length;
-            return bLen - aLen;
-        });
+                const aLen = a.path.split('.').length;
+                const bLen = b.path.split('.').length;
+                return bLen - aLen;
+            });
         let translator;
         if (this.hasTranslator(definition.namespace, definition.element)) {
             // Get existing translator
@@ -107,8 +111,7 @@ export default class Registry {
                 if (t && !t.placeholder) {
                     translator = t;
                     break;
-                }
-                else if (t) {
+                } else if (t) {
                     placeholder = t;
                 }
             }
@@ -171,7 +174,16 @@ export default class Registry {
             typeOrder: definition.typeOrder
         });
         for (const link of aliases) {
-            this.alias(definition.namespace, definition.element, link.path, link.multiple, link.selector, link.contextField, definition.type, link.impliedType);
+            this.alias(
+                definition.namespace,
+                definition.element,
+                link.path,
+                link.multiple,
+                link.selector,
+                link.contextField,
+                definition.type,
+                link.impliedType
+            );
         }
         for (const alias of aliases) {
             const existing = this.walkToTranslator(alias.path.split('.'));
@@ -180,7 +192,16 @@ export default class Registry {
             }
         }
     }
-    alias(namespace, element, path, multiple = false, selector, contextField, contextType, contextImpliedType = false) {
+    alias(
+        namespace,
+        element,
+        path,
+        multiple = false,
+        selector,
+        contextField,
+        contextType,
+        contextImpliedType = false
+    ) {
         const linkedTranslator = this.getOrCreateTranslator(namespace, element);
         linkedTranslator.placeholder = false;
         const keys = path.split('.').filter(key => {
@@ -190,7 +211,14 @@ export default class Registry {
         const translator = this.walkToTranslator(keys, true);
         const xid = `{${namespace}}${element}`;
         if (contextType && (contextField || contextImpliedType)) {
-            linkedTranslator.addContext(path, selector, contextField, xid, contextType, contextImpliedType);
+            linkedTranslator.addContext(
+                path,
+                selector,
+                contextField,
+                xid,
+                contextType,
+                contextImpliedType
+            );
         }
         translator.addChild(finalKey, linkedTranslator, multiple, selector, xid);
     }
@@ -203,8 +231,7 @@ export default class Registry {
                     next = new Translator();
                     next.placeholder = true;
                     translator.addChild(key, next);
-                }
-                else {
+                } else {
                     return;
                 }
             }

@@ -82,7 +82,13 @@ export interface PubsubSubscriptions {
     jid?: JID;
     items?: PubsubSubscription[];
 }
-declare type PubsubAffiliationState = 'member' | 'none' | 'outcast' | 'owner' | 'publisher' | 'publish-only';
+declare type PubsubAffiliationState =
+    | 'member'
+    | 'none'
+    | 'outcast'
+    | 'owner'
+    | 'publisher'
+    | 'publish-only';
 export interface PubsubAffiliation {
     node?: string;
     affiliation?: PubsubAffiliationState;

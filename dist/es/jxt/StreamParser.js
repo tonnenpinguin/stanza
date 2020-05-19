@@ -52,19 +52,17 @@ export default class StreamParser extends Transform {
                         xml: el
                     });
                     return;
-                }
-                else {
+                } else {
                     return this.destroy(JXTError.notWellFormed());
                 }
             }
             if (!this.currentElement) {
                 this.currentElement = el;
-            }
-            else {
+            } else {
                 this.currentElement = this.currentElement.appendChild(el);
             }
         });
-        this.parser.on('endElement', (name) => {
+        this.parser.on('endElement', name => {
             if (this.destroyed) {
                 return;
             }
@@ -88,8 +86,7 @@ export default class StreamParser extends Transform {
             }
             if (this.currentElement.parent) {
                 this.currentElement = this.currentElement.parent;
-            }
-            else {
+            } else {
                 if (this.wrappedStream) {
                     this.currentElement.parent = this.rootElement;
                 }
@@ -108,7 +105,7 @@ export default class StreamParser extends Transform {
                 this.currentElement = undefined;
             }
         });
-        this.parser.on('text', (text) => {
+        this.parser.on('text', text => {
             if (this.currentElement) {
                 this.currentElement.children.push(text);
             }

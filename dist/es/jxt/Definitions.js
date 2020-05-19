@@ -25,12 +25,14 @@ function unescapeXMLReplaceChar(match) {
     }
     const hex = match.startsWith('&#x');
     const code = parseInt(match.substring(hex ? 3 : 2, match.length - 1), hex ? 16 : 10);
-    if (code === 0x9 ||
+    if (
+        code === 0x9 ||
         code === 0xa ||
         code === 0xd ||
         (0x20 <= code && code <= 0xd7ff) ||
         (0xe000 <= code && code <= 0xfffd) ||
-        (0x10000 <= code && code <= 0x10ffff)) {
+        (0x10000 <= code && code <= 0x10ffff)
+    ) {
         return String.fromCodePoint(code);
     }
     throw JXTError.restrictedXML('Prohibited entity: ' + match);

@@ -11,13 +11,16 @@ import { unescapeXML } from './Definitions';
 import XMLElement from './Element';
 import JXTError from './Error';
 function isBasicNameStart(c) {
-    return ((97 /* a */ <= c && c <= 122 /* z */) ||
-        (65 /* A */ <= c && c <= 90 /* Z */) ||
+    return (
+        (97 /* a */ <= c && c <= 122) /* z */ ||
+        (65 /* A */ <= c && c <= 90) /* Z */ ||
         c === 58 /* Colon */ ||
-        c === 95 /* Underscore */);
+        c === 95 /* Underscore */
+    );
 }
 function isExtendedNameStart(c) {
-    return ((0xc0 <= c && c <= 0xd6) ||
+    return (
+        (0xc0 <= c && c <= 0xd6) ||
         (0xd8 <= c && c <= 0xf6) ||
         (0xf8 <= c && c <= 0x2ff) ||
         (0x370 <= c && c <= 0x37d) ||
@@ -27,26 +30,31 @@ function isExtendedNameStart(c) {
         (0x2c00 <= c && c <= 0x2fef) ||
         (0x3001 <= c && c <= 0xd7ff) ||
         (0xfdf0 <= c && c <= 0xfffd) ||
-        (0x10000 <= c && c <= 0xeffff));
+        (0x10000 <= c && c <= 0xeffff)
+    );
 }
 function isNameStart(c) {
     return isBasicNameStart(c) || isExtendedNameStart(c);
 }
 function isName(c) {
-    return (isBasicNameStart(c) ||
+    return (
+        isBasicNameStart(c) ||
         c === 45 /* Dash */ ||
         c === 46 /* Period */ ||
-        (48 /* Zero */ <= c && c <= 57 /* Nine */) ||
+        (48 /* Zero */ <= c && c <= 57) /* Nine */ ||
         c === 0xb7 ||
         (0x0300 <= c && c <= 0x036f) ||
         (0x203f <= c && c <= 0x2040) ||
-        isExtendedNameStart(c));
+        isExtendedNameStart(c)
+    );
 }
 function isWhitespace(c) {
-    return (c === 32 /* Space */ ||
+    return (
+        c === 32 /* Space */ ||
         c === 10 /* NewLine */ ||
         c === 13 /* CarriageReturn */ ||
-        c === 9 /* Tab */);
+        c === 9 /* Tab */
+    );
 }
 class Parser extends EventEmitter {
     constructor(opts = {}) {
@@ -70,8 +78,7 @@ class Parser extends EventEmitter {
                         let text;
                         try {
                             text = unescapeXML(this.endRecord());
-                        }
-                        catch (err) {
+                        } catch (err) {
                             this.emit('error', err);
                             return;
                         }
@@ -80,8 +87,7 @@ class Parser extends EventEmitter {
                         }
                         this.transition(31 /* TAG_START */);
                         continue;
-                    }
-                    else {
+                    } else {
                         this.record(char);
                         continue;
                     }
@@ -259,8 +265,10 @@ class Parser extends EventEmitter {
                 }
                 case 1 /* ATTR_QUOTE_DOUBLE */:
                 case 2 /* ATTR_QUOTE_SINGLE */: {
-                    if ((c === 34 /* DoubleQuote */ && this.state === 1 /* ATTR_QUOTE_DOUBLE */) ||
-                        (c === 39 /* SingleQuote */ && this.state === 2 /* ATTR_QUOTE_SINGLE */)) {
+                    if (
+                        (c === 34 /* DoubleQuote */ && this.state === 1) /* ATTR_QUOTE_DOUBLE */ ||
+                        (c === 39 /* SingleQuote */ && this.state === 2) /* ATTR_QUOTE_SINGLE */
+                    ) {
                         const value = this.endRecord();
                         this.attributes[this.attributeName] = unescapeXML(value);
                         this.transition(33 /* TAG */);
@@ -302,8 +310,7 @@ class Parser extends EventEmitter {
                 case 12 /* END_COMMENT_DASH */: {
                     if (c === 45 /* Dash */) {
                         this.transition(11 /* END_COMMENT_DASH_DASH */);
-                    }
-                    else {
+                    } else {
                         this.transition(14 /* IGNORE_COMMENT */);
                     }
                     continue;
@@ -311,8 +318,7 @@ class Parser extends EventEmitter {
                 case 11 /* END_COMMENT_DASH_DASH */: {
                     if (c === 62 /* GreaterThan */) {
                         this.transition(34 /* TEXT */);
-                    }
-                    else {
+                    } else {
                         this.transition(14 /* IGNORE_COMMENT */);
                     }
                     continue;
@@ -394,8 +400,7 @@ class Parser extends EventEmitter {
                 case 10 /* END_CDATA_RB */: {
                     if (c === 93 /* RightBracket */) {
                         this.transition(9 /* END_CDATA_RB_RB */);
-                    }
-                    else {
+                    } else {
                         this.record(String.fromCodePoint(93 /* RightBracket */));
                         this.record(char);
                         this.transition(5 /* CDATA */);
@@ -409,8 +414,7 @@ class Parser extends EventEmitter {
                             this.emit('text', text);
                         }
                         this.transition(34 /* TEXT */);
-                    }
-                    else {
+                    } else {
                         this.record(String.fromCodePoint(93 /* RightBracket */));
                         this.record(String.fromCodePoint(93 /* RightBracket */));
                         this.record(char);
@@ -478,7 +482,7 @@ export function parse(data, opts = {}) {
     let result;
     let element;
     let error = null;
-    p.on('text', (text) => {
+    p.on('text', text => {
         if (element) {
             element.children.push(text);
         }
@@ -490,33 +494,29 @@ export function parse(data, opts = {}) {
         }
         if (!element) {
             element = child;
-        }
-        else {
+        } else {
             element = element.appendChild(child);
         }
     });
-    p.on('endElement', (name) => {
+    p.on('endElement', name => {
         if (!element) {
             p.emit('error', JXTError.notWellFormed('a'));
-        }
-        else if (name === element.name) {
+        } else if (name === element.name) {
             if (element.parent) {
                 element = element.parent;
             }
-        }
-        else {
+        } else {
             p.emit('error', JXTError.notWellFormed('b'));
         }
     });
-    p.on('error', (e) => {
+    p.on('error', e => {
         error = e;
     });
     p.write(data);
     p.end();
     if (error) {
         throw error;
-    }
-    else {
+    } else {
         return result;
     }
 }

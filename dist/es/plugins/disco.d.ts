@@ -7,10 +7,12 @@ declare module '../' {
         getDiscoInfo(jid?: string, node?: string): Promise<DiscoInfoResult>;
         getDiscoItems(jid?: string, node?: string): Promise<DiscoItemsResult>;
         updateCaps(): LegacyEntityCaps[] | undefined;
-        getCurrentCaps(): {
-            legacyCapabilities: LegacyEntityCaps[];
-            info: DiscoNodeInfo;
-        } | undefined;
+        getCurrentCaps():
+            | {
+                  legacyCapabilities: LegacyEntityCaps[];
+                  info: DiscoNodeInfo;
+              }
+            | undefined;
     }
     interface AgentConfig {
         /**

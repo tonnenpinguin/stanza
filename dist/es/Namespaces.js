@@ -122,7 +122,7 @@ export const NS_ALT_CONNECTIONS_XBOSH = 'urn:xmpp:alt-connections:xbosh';
 // XEP-0158
 export const NS_CAPTCHA = 'urn:xmpp:captcha';
 // XEP-0163
-export const NS_PEP_NOTIFY = (ns) => `${ns}+notify`;
+export const NS_PEP_NOTIFY = ns => `${ns}+notify`;
 // XEP-0166
 export const NS_JINGLE_1 = 'urn:xmpp:jingle:1';
 export const NS_JINGLE_ERRORS_1 = 'urn:xmpp:jingle:errors:1';
@@ -203,7 +203,7 @@ export const NS_FORWARD_0 = 'urn:xmpp:forward:0';
 // XEP-0300
 export const NS_HASHES_1 = 'urn:xmpp:hashes:1';
 export const NS_HASHES_2 = 'urn:xmpp:hashes:2';
-export const NS_HASH_NAME = (name) => `urn:xmpp:hash-function-text-names:${name}`;
+export const NS_HASH_NAME = name => `urn:xmpp:hash-function-text-names:${name}`;
 // XEP-0301
 export const NS_RTT_0 = 'urn:xmpp:rtt:0';
 // XEP-0307
@@ -265,7 +265,7 @@ export const NS_OMEMO_AXOLOTL = 'eu.siacs.conversations.axolotl';
 export const NS_OMEMO_AXOLOTL_DEVICELIST = 'eu.siacs.conversations.axolotl.devicelist';
 export const NS_OMEMO_AXOLOTL_BUNDLES = 'eu.siacs.conversations.axolotl.bundles';
 // istanbul ignore next
-export const NS_OMEMO_AXOLOTL_BUNDLE = (deviceId) => `${NS_OMEMO_AXOLOTL_BUNDLES}:${deviceId}`;
+export const NS_OMEMO_AXOLOTL_BUNDLE = deviceId => `${NS_OMEMO_AXOLOTL_BUNDLES}:${deviceId}`;
 // XEP-0432
 export const NS_JSON_MESSAGE_0 = 'urn:xmpp:json-msg:0';
 // ================================================================

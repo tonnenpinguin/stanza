@@ -8,7 +8,13 @@ declare module './' {
         commandError?: AdhocCommandError;
     }
 }
-export declare type AdhocCommandError = 'bad-action' | 'bad-locale' | 'bad-payload' | 'bad-sessionid' | 'malformed-action' | 'session-expired';
+export declare type AdhocCommandError =
+    | 'bad-action'
+    | 'bad-locale'
+    | 'bad-payload'
+    | 'bad-sessionid'
+    | 'malformed-action'
+    | 'session-expired';
 export interface AdHocCommand {
     sid?: string;
     node?: string;

@@ -1,4 +1,3 @@
-import { __awaiter } from "tslib";
 import * as Hashes from 'stanza-shims';
 import { saslprep } from '../stringprep';
 export class SimpleMech {
@@ -62,9 +61,7 @@ export class Factory {
 // ====================================================================
 // istanbul ignore next
 export function createClientNonce(length = 32) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return (yield Hashes.randomBytes(length)).toString('hex');
-    });
+    return Hashes.randomBytes(length).toString('hex');
 }
 // tslint:disable no-bitwise
 export function XOR(a, b) {
@@ -106,11 +103,9 @@ function escapeUsername(name) {
     for (const curr of name) {
         if (curr === ',') {
             escaped.push('=2C');
-        }
-        else if (curr === '=') {
+        } else if (curr === '=') {
             escaped.push('=3D');
-        }
-        else {
+        } else {
             escaped.push(curr);
         }
     }
@@ -124,9 +119,7 @@ export class ANONYMOUS extends SimpleMech {
         return { optional: ['trace'], required: [] };
     }
     createResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return Buffer.from(credentials.trace || '');
-        });
+        return Buffer.from(credentials.trace || '');
     }
 }
 // ====================================================================
@@ -137,9 +130,7 @@ export class EXTERNAL extends SimpleMech {
         return { optional: ['authzid'], required: [] };
     }
     createResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return Buffer.from(credentials.authzid || '');
-        });
+        return Buffer.from(credentials.authzid || '');
     }
 }
 // ====================================================================
@@ -153,13 +144,13 @@ export class PLAIN extends SimpleMech {
         };
     }
     createResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return Buffer.from((credentials.authzid || '') +
+        return Buffer.from(
+            (credentials.authzid || '') +
                 '\x00' +
                 credentials.username +
                 '\x00' +
-                (credentials.password || credentials.token));
-        });
+                (credentials.password || credentials.token)
+        );
     }
 }
 // ====================================================================
@@ -178,14 +169,12 @@ export class OAUTH extends SimpleMech {
         };
     }
     createResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.failed) {
-                return Buffer.from('\u0001');
-            }
-            const gs2header = `n,${escapeUsername(saslprep(credentials.authzid))},`;
-            const auth = `auth=Bearer ${credentials.token}\u0001`;
-            return Buffer.from(gs2header + '\u0001' + auth + '\u0001', 'utf8');
-        });
+        if (this.failed) {
+            return Buffer.from('\u0001');
+        }
+        const gs2header = `n,${escapeUsername(saslprep(credentials.authzid))},`;
+        const auth = `auth=Bearer ${credentials.token}\u0001`;
+        return Buffer.from(gs2header + '\u0001' + auth + '\u0001', 'utf8');
     }
     processChallenge(challenge) {
         this.failed = true;
@@ -217,70 +206,67 @@ export class DIGEST extends SimpleMech {
         };
     }
     createResponse(credentials) {
-        var _a, _b, _c;
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.state === 'INITIAL' || this.authenticated) {
-                return null;
-            }
-            let uri = credentials.serviceType + '/' + credentials.host;
-            if (credentials.serviceName && credentials.host !== credentials.serviceName) {
-                uri += '/' + credentials.serviceName;
-            }
-            const realm = (_b = (_a = credentials.realm) !== null && _a !== void 0 ? _a : this.realm) !== null && _b !== void 0 ? _b : '';
-            const cnonce = (_c = credentials.clientNonce) !== null && _c !== void 0 ? _c : (yield createClientNonce(16));
-            const nc = '00000001';
-            const qop = 'auth';
-            let str = '';
-            str += 'username="' + credentials.username + '"';
-            if (realm) {
-                str += ',realm="' + realm + '"';
-            }
-            str += ',nonce="' + this.nonce + '"';
-            str += ',cnonce="' + cnonce + '"';
-            str += ',nc=' + nc;
-            str += ',qop=' + qop;
-            str += ',digest-uri="' + uri + '"';
-            const base = Hashes.createHash('md5')
-                .update(credentials.username)
-                .update(':')
-                .update(realm)
-                .update(':')
-                .update(credentials.password)
-                .digest();
-            const ha1 = Hashes.createHash('md5')
-                .update(base)
-                .update(':')
-                .update(this.nonce)
-                .update(':')
-                .update(cnonce);
-            if (credentials.authzid) {
-                ha1.update(':').update(credentials.authzid);
-            }
-            const dha1 = ha1.digest('hex');
-            const ha2 = Hashes.createHash('md5').update('AUTHENTICATE:').update(uri);
-            const dha2 = ha2.digest('hex');
-            const digest = Hashes.createHash('md5')
-                .update(dha1)
-                .update(':')
-                .update(this.nonce)
-                .update(':')
-                .update(nc)
-                .update(':')
-                .update(cnonce)
-                .update(':')
-                .update(qop)
-                .update(':')
-                .update(dha2)
-                .digest('hex');
-            str += ',response=' + digest;
-            if (this.charset === 'utf-8') {
-                str += ',charset=utf-8';
-            }
-            if (credentials.authzid) {
-                str += ',authzid="' + credentials.authzid + '"';
-            }
-            return Buffer.from(str);
-        });
+        if (this.state === 'INITIAL' || this.authenticated) {
+            return null;
+        }
+        let uri = credentials.serviceType + '/' + credentials.host;
+        if (credentials.serviceName && credentials.host !== credentials.serviceName) {
+            uri += '/' + credentials.serviceName;
+        }
+        const realm = credentials.realm || this.realm || '';
+        const cnonce = credentials.clientNonce || createClientNonce(16);
+        const nc = '00000001';
+        const qop = 'auth';
+        let str = '';
+        str += 'username="' + credentials.username + '"';
+        if (realm) {
+            str += ',realm="' + realm + '"';
+        }
+        str += ',nonce="' + this.nonce + '"';
+        str += ',cnonce="' + cnonce + '"';
+        str += ',nc=' + nc;
+        str += ',qop=' + qop;
+        str += ',digest-uri="' + uri + '"';
+        const base = Hashes.createHash('md5')
+            .update(credentials.username)
+            .update(':')
+            .update(realm)
+            .update(':')
+            .update(credentials.password)
+            .digest();
+        const ha1 = Hashes.createHash('md5')
+            .update(base)
+            .update(':')
+            .update(this.nonce)
+            .update(':')
+            .update(cnonce);
+        if (credentials.authzid) {
+            ha1.update(':').update(credentials.authzid);
+        }
+        const dha1 = ha1.digest('hex');
+        const ha2 = Hashes.createHash('md5').update('AUTHENTICATE:').update(uri);
+        const dha2 = ha2.digest('hex');
+        const digest = Hashes.createHash('md5')
+            .update(dha1)
+            .update(':')
+            .update(this.nonce)
+            .update(':')
+            .update(nc)
+            .update(':')
+            .update(cnonce)
+            .update(':')
+            .update(qop)
+            .update(':')
+            .update(dha2)
+            .digest('hex');
+        str += ',response=' + digest;
+        if (this.charset === 'utf-8') {
+            str += ',charset=utf-8';
+        }
+        if (credentials.authzid) {
+            str += ',authzid="' + credentials.authzid + '"';
+        }
+        return Buffer.from(str);
     }
 }
 // ====================================================================
@@ -309,12 +295,10 @@ export class SCRAM {
         return this.cache;
     }
     createResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.state === 'INITIAL') {
-                return this.initialResponse(credentials);
-            }
-            return this.challengeResponse(credentials);
-        });
+        if (this.state === 'INITIAL') {
+            return this.initialResponse(credentials);
+        }
+        return this.challengeResponse(credentials);
     }
     processChallenge(challenge) {
         const values = parse(challenge);
@@ -349,25 +333,22 @@ export class SCRAM {
         };
     }
     initialResponse(credentials) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const authzid = escapeUsername(saslprep(credentials.authzid));
-            const username = escapeUsername(saslprep(credentials.username));
-            this.clientNonce = credentials.clientNonce || (yield createClientNonce());
-            let cbindHeader = 'n';
-            if (credentials.tlsUnique) {
-                if (!this.useChannelBinding) {
-                    cbindHeader = 'y';
-                }
-                else {
-                    cbindHeader = 'p=tls-unique';
-                }
+        const authzid = escapeUsername(saslprep(credentials.authzid));
+        const username = escapeUsername(saslprep(credentials.username));
+        this.clientNonce = credentials.clientNonce || createClientNonce();
+        let cbindHeader = 'n';
+        if (credentials.tlsUnique) {
+            if (!this.useChannelBinding) {
+                cbindHeader = 'y';
+            } else {
+                cbindHeader = 'p=tls-unique';
             }
-            this.gs2Header = Buffer.from(authzid ? `${cbindHeader},a=${authzid},` : `${cbindHeader},,`);
-            this.clientFirstMessageBare = Buffer.from(`n=${username},r=${this.clientNonce}`);
-            const result = Buffer.concat([this.gs2Header, this.clientFirstMessageBare]);
-            this.state = 'CHALLENGE';
-            return result;
-        });
+        }
+        this.gs2Header = Buffer.from(authzid ? `${cbindHeader},a=${authzid},` : `${cbindHeader},,`);
+        this.clientFirstMessageBare = Buffer.from(`n=${username},r=${this.clientNonce}`);
+        const result = Buffer.concat([this.gs2Header, this.clientFirstMessageBare]);
+        this.state = 'CHALLENGE';
+        return result;
     }
     challengeResponse(credentials) {
         const CLIENT_KEY = Buffer.from('Client Key');
@@ -386,14 +367,17 @@ export class SCRAM {
         if (cached && credentials.clientKey && credentials.serverKey) {
             clientKey = Buffer.from(credentials.clientKey);
             serverKey = Buffer.from(credentials.serverKey);
-        }
-        else if (cached && credentials.saltedPassword) {
+        } else if (cached && credentials.saltedPassword) {
             saltedPassword = Buffer.from(credentials.saltedPassword);
             clientKey = HMAC(saltedPassword, CLIENT_KEY, this.algorithm);
             serverKey = HMAC(saltedPassword, SERVER_KEY, this.algorithm);
-        }
-        else {
-            saltedPassword = Hi(Buffer.from(saslprep(credentials.password)), this.salt, this.iterationCount, this.algorithm);
+        } else {
+            saltedPassword = Hi(
+                Buffer.from(saslprep(credentials.password)),
+                this.salt,
+                this.iterationCount,
+                this.algorithm
+            );
             clientKey = HMAC(saltedPassword, CLIENT_KEY, this.algorithm);
             serverKey = HMAC(saltedPassword, SERVER_KEY, this.algorithm);
         }

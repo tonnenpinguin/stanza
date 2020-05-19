@@ -24,10 +24,13 @@ export default class BOSH extends Duplex implements Transport {
     private isEnded;
     constructor(client: Agent, sm: StreamManagement, stanzas: Registry);
     _write(chunk: any, encoding: string, done: (err?: Error) => void): void;
-    _writev(chunks: Array<{
-        chunk: any;
-        encoding: any;
-    }>, done: (err?: Error) => void): void;
+    _writev(
+        chunks: Array<{
+            chunk: any;
+            encoding: any;
+        }>,
+        done: (err?: Error) => void
+    ): void;
     _read(): void;
     process(result: string): void;
     connect(opts: TransportConfig): void;

@@ -5,7 +5,7 @@ export default function (client) {
         name: 'Ad-Hoc Commands',
         node: NS_ADHOC_COMMANDS
     });
-    client.getCommands = (jid) => {
+    client.getCommands = jid => {
         return client.getDiscoItems(jid, NS_ADHOC_COMMANDS);
     };
 }

@@ -17,6 +17,9 @@ declare module '../' {
         registerFeature(name: string, priority: number, handler: FeatureHandler): void;
     }
 }
-declare type FeatureHandler = (data: StreamFeatures, done: (cmd?: string, msg?: string) => void) => void;
+declare type FeatureHandler = (
+    data: StreamFeatures,
+    done: (cmd?: string, msg?: string) => void
+) => void;
 export default function (client: Agent): void;
 export {};

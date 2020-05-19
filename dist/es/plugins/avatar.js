@@ -26,17 +26,27 @@ export default function (client) {
         }
     });
     client.publishAvatar = (id, data) => {
-        return client.publish('', NS_AVATAR_DATA, {
-            data,
-            itemType: NS_AVATAR_DATA
-        }, id);
+        return client.publish(
+            '',
+            NS_AVATAR_DATA,
+            {
+                data,
+                itemType: NS_AVATAR_DATA
+            },
+            id
+        );
     };
     client.useAvatars = (versions, pointers = []) => {
-        return client.publish('', NS_AVATAR_METADATA, {
-            itemType: NS_AVATAR_METADATA,
-            pointers,
-            versions
-        }, 'current');
+        return client.publish(
+            '',
+            NS_AVATAR_METADATA,
+            {
+                itemType: NS_AVATAR_METADATA,
+                pointers,
+                versions
+            },
+            'current'
+        );
     };
     client.getAvatar = (jid, id) => {
         return client.getItem(jid, NS_AVATAR_DATA, id);

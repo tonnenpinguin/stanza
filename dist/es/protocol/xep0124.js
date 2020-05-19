@@ -11,7 +11,15 @@
 // Source: https://xmpp.org/extensions/xep-0206.html
 // Version: 1.4 (2014-04-09)
 // ====================================================================
-import { attribute, childText, integerAttribute, JIDAttribute, languageAttribute, namespacedAttribute, namespacedBooleanAttribute } from '../jxt';
+import {
+    attribute,
+    childText,
+    integerAttribute,
+    JIDAttribute,
+    languageAttribute,
+    namespacedAttribute,
+    namespacedBooleanAttribute
+} from '../jxt';
 import { NS_BOSH, NS_BOSH_XMPP } from '../Namespaces';
 const Protocol = {
     element: 'body',
@@ -45,15 +53,21 @@ const Protocol = {
         version: attribute('ver'),
         // XEP-0206
         xmppRestart: namespacedBooleanAttribute('xmpp', NS_BOSH_XMPP, 'restart', undefined, {
-            writeValue: (value) => {
+            writeValue: value => {
                 return value ? 'true' : 'false';
             }
         }),
-        xmppRestartLogic: namespacedBooleanAttribute('xmpp', NS_BOSH_XMPP, 'restartlogic', undefined, {
-            writeValue: (value) => {
-                return value ? 'true' : 'false';
+        xmppRestartLogic: namespacedBooleanAttribute(
+            'xmpp',
+            NS_BOSH_XMPP,
+            'restartlogic',
+            undefined,
+            {
+                writeValue: value => {
+                    return value ? 'true' : 'false';
+                }
             }
-        }),
+        ),
         xmppVersion: namespacedAttribute('xmpp', NS_BOSH_XMPP, 'version')
     },
     namespace: NS_BOSH,

@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { Duplex } from 'readable-stream';
 import { fetch } from 'stanza-shims';
 import { StreamErrorCondition } from '../Constants';
@@ -19,30 +19,31 @@ class RequestChannel {
             while (attempts <= this.maxRetries) {
                 attempts += 1;
                 try {
-                    const res = yield timeoutPromise(fetch(this.stream.url, {
-                        body,
-                        headers: {
-                            'Content-Type': this.stream.contentType
-                        },
-                        method: 'POST'
-                    }), this.maxTimeout, () => new Error('Request timed out'));
+                    const res = yield timeoutPromise(
+                        fetch(this.stream.url, {
+                            body,
+                            headers: {
+                                'Content-Type': this.stream.contentType
+                            },
+                            method: 'POST'
+                        }),
+                        this.maxTimeout,
+                        () => new Error('Request timed out')
+                    );
                     if (!res.ok) {
                         throw new Error('HTTP Status Error: ' + res.status);
                     }
                     const result = yield res.text();
                     this.active = false;
                     return result;
-                }
-                catch (err) {
+                } catch (err) {
                     if (attempts === 1) {
                         continue;
-                    }
-                    else if (attempts < this.maxRetries) {
+                    } else if (attempts < this.maxRetries) {
                         const backoff = Math.min(this.maxTimeout, Math.pow(attempts, 2) * 1000);
                         yield sleep(backoff + Math.random() * 1000);
                         continue;
-                    }
-                    else {
+                    } else {
                         this.active = false;
                         throw err;
                     }
@@ -98,7 +99,7 @@ export default class BOSH extends Duplex {
             rootKey: 'bosh',
             wrappedStream: true
         });
-        parser.on('error', (err) => {
+        parser.on('error', err => {
             const streamError = {
                 condition: StreamErrorCondition.InvalidXML
             };
@@ -106,7 +107,7 @@ export default class BOSH extends Duplex {
             this.send('error', streamError);
             return this.disconnect();
         });
-        parser.on('data', (e) => {
+        parser.on('data', e => {
             if (e.event === 'stream-start') {
                 this.stream = e.stanza;
                 if (e.stanza.type === 'terminate') {
@@ -119,8 +120,7 @@ export default class BOSH extends Duplex {
                         this.client.emit('stream:end');
                         this.push(null);
                     }
-                }
-                else if (!this.hasStream) {
+                } else if (!this.hasStream) {
                     this.hasStream = true;
                     this.stream = e.stanza;
                     this.sid = e.stanza.sid || this.sid;
@@ -178,8 +178,7 @@ export default class BOSH extends Duplex {
             this._send({
                 type: 'terminate'
             });
-        }
-        else {
+        } else {
             this.stream = undefined;
             this.sid = undefined;
             this.rid = undefined;
@@ -191,7 +190,10 @@ export default class BOSH extends Duplex {
         return __awaiter(this, void 0, void 0, function* () {
             let output;
             if (data) {
-                output = (_a = this.stanzas.export(dataOrName, data)) === null || _a === void 0 ? void 0 : _a.toString();
+                output =
+                    (_a = this.stanzas.export(dataOrName, data)) === null || _a === void 0
+                        ? void 0
+                        : _a.toString();
             }
             if (!output) {
                 return;
@@ -216,23 +218,25 @@ export default class BOSH extends Duplex {
                 return;
             }
             const rid = this.rid++;
-            const header = this.stanzas.export('bosh', Object.assign(Object.assign({}, boshData), { rid, sid: this.sid }));
+            const header = this.stanzas.export(
+                'bosh',
+                Object.assign(Object.assign({}, boshData), { rid, sid: this.sid })
+            );
             let body;
             if (payload) {
                 body = [header.openTag(), payload, header.closeTag()].join('');
-            }
-            else {
+            } else {
                 body = header.toString();
             }
             this.client.emit('raw', 'outgoing', body);
             this.sendingChannel
                 .send(rid, body)
                 .then(result => {
-                this.process(result);
-            })
+                    this.process(result);
+                })
                 .catch(err => {
-                this.end(err);
-            });
+                    this.end(err);
+                });
             this.toggleChannel();
         });
     }
@@ -244,19 +248,19 @@ export default class BOSH extends Duplex {
             const rid = this.rid++;
             const body = this.stanzas
                 .export('bosh', {
-                rid,
-                sid: this.sid
-            })
+                    rid,
+                    sid: this.sid
+                })
                 .toString();
             this.client.emit('raw', 'outgoing', body);
             this.pollingChannel
                 .send(rid, body)
                 .then(result => {
-                this.process(result);
-            })
+                    this.process(result);
+                })
                 .catch(err => {
-                this.end(err);
-            });
+                    this.end(err);
+                });
         });
     }
     scheduleRequests() {
@@ -274,8 +278,7 @@ export default class BOSH extends Duplex {
                 const [data, done] = this.queue.shift();
                 this._send({}, data);
                 done();
-            }
-            else {
+            } else {
                 this.scheduleRequests();
             }
             return;

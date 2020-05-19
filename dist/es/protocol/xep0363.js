@@ -4,7 +4,16 @@
 // Source: https://xmpp.org/extensions/xep-0363.html
 // Version: 0.5.0 (2018-02-15)
 // ====================================================================
-import { attribute, childAttribute, childDateAttribute, childEnum, deepChildInteger, extendStanzaError, integerAttribute, text } from '../jxt';
+import {
+    attribute,
+    childAttribute,
+    childDateAttribute,
+    childEnum,
+    deepChildInteger,
+    extendStanzaError,
+    integerAttribute,
+    text
+} from '../jxt';
 import { NS_HTTP_UPLOAD_0 } from '../Namespaces';
 const Protocol = [
     extendStanzaError({

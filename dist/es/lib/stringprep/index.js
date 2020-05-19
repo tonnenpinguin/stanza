@@ -18,14 +18,15 @@ export class Table {
                 });
             }
             if (data.m) {
-                this.mappings = new Map(data.m.split('|').map(m => {
-                    const [point, mapping] = m.split(':');
-                    const mappedPoints = mapping.split(';').map(p => parseInt(p, 32));
-                    return [parseInt(point, 32), mappedPoints];
-                }));
+                this.mappings = new Map(
+                    data.m.split('|').map(m => {
+                        const [point, mapping] = m.split(':');
+                        const mappedPoints = mapping.split(';').map(p => parseInt(p, 32));
+                        return [parseInt(point, 32), mappedPoints];
+                    })
+                );
             }
-        }
-        else if (points) {
+        } else if (points) {
             this.singles = new Set(points);
         }
     }
@@ -81,8 +82,8 @@ export const D2 = new Table('D.2');
 B1.map = () => {
     return null;
 };
-C11.contains = (codePoint) => codePoint === 32;
-C12.map = (codePoint) => {
+C11.contains = codePoint => codePoint === 32;
+C12.map = codePoint => {
     return C12.contains(codePoint) ? 32 : null;
 };
 export function prepare(profile, allowUnassigned, input = '') {
@@ -104,8 +105,7 @@ export function prepare(profile, allowUnassigned, input = '') {
             }
             if (Array.isArray(mappedPoint)) {
                 mappedCodePoints = mappedCodePoints.concat(mappedPoint);
-            }
-            else {
+            } else {
                 mappedCodePoints.push(mappedPoint);
             }
         }
@@ -140,10 +140,14 @@ export function prepare(profile, allowUnassigned, input = '') {
         if (hasRandALCat && hasLCat) {
             throw new Error('String contained both LCat and RandALCat code points');
         }
-        if (hasRandALCat &&
+        if (
+            hasRandALCat &&
             (!D1.contains(normalizedCodePoints[0]) ||
-                !D1.contains(normalizedCodePoints[normalizedCodePoints.length - 1]))) {
-            throw new Error('String containing RandALCat code points must start and end with RandALCat code points');
+                !D1.contains(normalizedCodePoints[normalizedCodePoints.length - 1]))
+        ) {
+            throw new Error(
+                'String containing RandALCat code points must start and end with RandALCat code points'
+            );
         }
     }
     return Punycode.ucs2.encode(normalizedCodePoints);

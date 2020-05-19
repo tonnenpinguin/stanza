@@ -29,6 +29,12 @@ export interface StreamManagementFailed {
     type: 'failed';
     handled?: number;
 }
-export declare type StreamManagement = StreamManagementAck | StreamManagementRequest | StreamManagementEnable | StreamManagementEnabled | StreamManagementResume | StreamManagementFailed;
+export declare type StreamManagement =
+    | StreamManagementAck
+    | StreamManagementRequest
+    | StreamManagementEnable
+    | StreamManagementEnabled
+    | StreamManagementResume
+    | StreamManagementFailed;
 declare const Protocol: DefinitionOptions[];
 export default Protocol;

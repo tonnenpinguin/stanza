@@ -38,7 +38,7 @@ export interface Mechanism {
     getCacheableCredentials(): CacheableCredentials | null;
     processChallenge(challenge: Buffer): void;
     processSuccess(challenge?: Buffer): void;
-    createResponse(credentials: Credentials & CacheableCredentials): Promise<Buffer | null>;
+    createResponse(credentials: Credentials & CacheableCredentials): Buffer | null;
     finalize(credentials?: Credentials): MechanismResult;
 }
 export declare type MechanismConstructor = new (name: string) => Mechanism;
@@ -62,28 +62,28 @@ export declare class Factory {
     disable(name: string): void;
     createMechanism(names: string[]): Mechanism | null;
 }
-export declare function createClientNonce(length?: number): Promise<string>;
+export declare function createClientNonce(length?: number): string;
 export declare function XOR(a: Buffer, b: Buffer): Buffer;
 export declare function H(text: Buffer, alg: string): Buffer;
 export declare function HMAC(key: Buffer, msg: Buffer, alg: string): Buffer;
 export declare function Hi(text: Buffer, salt: Buffer, iterations: number, alg: string): Buffer;
 export declare class ANONYMOUS extends SimpleMech implements Mechanism {
     getExpectedCredentials(): ExpectedCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer>;
+    createResponse(credentials: Credentials): Buffer;
 }
 export declare class EXTERNAL extends SimpleMech implements Mechanism {
     getExpectedCredentials(): ExpectedCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer>;
+    createResponse(credentials: Credentials): Buffer;
 }
 export declare class PLAIN extends SimpleMech implements Mechanism {
     getExpectedCredentials(): ExpectedCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer>;
+    createResponse(credentials: Credentials): Buffer;
 }
 export declare class OAUTH extends SimpleMech implements Mechanism {
     private failed;
     constructor(name: string);
     getExpectedCredentials(): ExpectedCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer>;
+    createResponse(credentials: Credentials): Buffer;
     processChallenge(challenge: Buffer): void;
 }
 export declare class DIGEST extends SimpleMech implements Mechanism {
@@ -96,7 +96,7 @@ export declare class DIGEST extends SimpleMech implements Mechanism {
     constructor(name: string);
     processChallenge(challenge: Buffer): void;
     getExpectedCredentials(): ExpectedCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer | null>;
+    createResponse(credentials: Credentials): Buffer | null;
 }
 export declare class SCRAM implements Mechanism {
     name: string;
@@ -118,7 +118,7 @@ export declare class SCRAM implements Mechanism {
     constructor(name: string);
     getExpectedCredentials(): ExpectedCredentials;
     getCacheableCredentials(): CacheableCredentials;
-    createResponse(credentials: Credentials): Promise<Buffer>;
+    createResponse(credentials: Credentials): Buffer | null;
     processChallenge(challenge: Buffer): void;
     processSuccess(success: Buffer): void;
     finalize(): MechanismResult;

@@ -1,4 +1,10 @@
-import { JingleAction, JingleContentSenders, JingleErrorCondition, JingleReasonCondition, JingleSessionRole } from '../Constants';
+import {
+    JingleAction,
+    JingleContentSenders,
+    JingleErrorCondition,
+    JingleReasonCondition,
+    JingleSessionRole
+} from '../Constants';
 import { JID } from '../JID';
 import { DefinitionOptions } from '../jxt';
 declare module './' {

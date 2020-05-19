@@ -1,5 +1,13 @@
 /// <reference types="node" />
-import { IQType, MessageType, PresenceType, SASLFailureCondition, StanzaErrorCondition, StreamErrorCondition, StreamType } from '../Constants';
+import {
+    IQType,
+    MessageType,
+    PresenceType,
+    SASLFailureCondition,
+    StanzaErrorCondition,
+    StreamErrorCondition,
+    StreamType
+} from '../Constants';
 import { DefinitionOptions, LanguageSet } from '../jxt';
 declare module './' {
     interface Stream {
@@ -43,8 +51,7 @@ declare module './' {
         error?: StanzaError;
         payloadType?: keyof IQPayload | 'invalid-payload-count' | 'unknown-payload';
     }
-    interface IQ extends IQBase, IQPayload {
-    }
+    interface IQ extends IQBase, IQPayload {}
     interface ReceivedIQ extends IQ {
         to: string;
         from: string;

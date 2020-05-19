@@ -1,8 +1,8 @@
 export declare enum JXTErrorCondition {
-    NotWellFormed = "not-well-formed",
-    RestrictedXML = "restricted-xml",
-    AlreadyClosed = "already-closed",
-    UnknownRoot = "unknown-stream-root"
+    NotWellFormed = 'not-well-formed',
+    RestrictedXML = 'restricted-xml',
+    AlreadyClosed = 'already-closed',
+    UnknownRoot = 'unknown-stream-root'
 }
 export interface JXTErrorOptions {
     condition: JXTErrorCondition;

@@ -1,7 +1,20 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { RTCPeerConnection } from 'stanza-shims';
 import * as Jingle from '../jingle';
-import { NS_JINGLE_1, NS_JINGLE_DTLS_0, NS_JINGLE_DTLS_SCTP_1, NS_JINGLE_FILE_TRANSFER_4, NS_JINGLE_FILE_TRANSFER_5, NS_JINGLE_ICE_0, NS_JINGLE_ICE_UDP_1, NS_JINGLE_RTP_1, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_HDREXT_0, NS_JINGLE_RTP_RTCP_FB_0, NS_JINGLE_RTP_VIDEO } from '../Namespaces';
+import {
+    NS_JINGLE_1,
+    NS_JINGLE_DTLS_0,
+    NS_JINGLE_DTLS_SCTP_1,
+    NS_JINGLE_FILE_TRANSFER_4,
+    NS_JINGLE_FILE_TRANSFER_5,
+    NS_JINGLE_ICE_0,
+    NS_JINGLE_ICE_UDP_1,
+    NS_JINGLE_RTP_1,
+    NS_JINGLE_RTP_AUDIO,
+    NS_JINGLE_RTP_HDREXT_0,
+    NS_JINGLE_RTP_RTCP_FB_0,
+    NS_JINGLE_RTP_VIDEO
+} from '../Namespaces';
 export default function (client) {
     const hasNativePeerConnection = !!RTCPeerConnection;
     const defaultConfig = {
@@ -20,13 +33,22 @@ export default function (client) {
     const jingle = (client.jingle = new Jingle.SessionManager(config));
     const caps = [NS_JINGLE_1];
     if (config.hasRTCPeerConnection) {
-        caps.push(NS_JINGLE_ICE_0, NS_JINGLE_ICE_UDP_1, NS_JINGLE_DTLS_SCTP_1, NS_JINGLE_DTLS_0, 'urn:ietf:rfc:5888' // Jingle Grouping Framework
+        caps.push(
+            NS_JINGLE_ICE_0,
+            NS_JINGLE_ICE_UDP_1,
+            NS_JINGLE_DTLS_SCTP_1,
+            NS_JINGLE_DTLS_0,
+            'urn:ietf:rfc:5888' // Jingle Grouping Framework
         );
         if (config.trickleIce === false) {
             caps.push('urn:ietf:rfc:3264'); // ICE prefer batched candidates
         }
         if (config.advertiseAudio || config.advertiseVideo) {
-            caps.push(NS_JINGLE_RTP_1, NS_JINGLE_RTP_RTCP_FB_0, NS_JINGLE_RTP_HDREXT_0, 'urn:ietf:rfc:5576' // Jingle Source Specific Media Attributes
+            caps.push(
+                NS_JINGLE_RTP_1,
+                NS_JINGLE_RTP_RTCP_FB_0,
+                NS_JINGLE_RTP_HDREXT_0,
+                'urn:ietf:rfc:5576' // Jingle Source Specific Media Attributes
             );
         }
         if (config.advertiseAudio) {
@@ -55,85 +77,92 @@ export default function (client) {
     ];
     for (const event of mappedEvents) {
         jingle.on(event, (session, data) => {
-            client.emit(('jingle:' + event), session, data);
+            client.emit('jingle:' + event, session, data);
         });
     }
     jingle.on('createdSession', data => {
         client.emit('jingle:created', data);
     });
-    jingle.on('send', (data) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            if (data.type === 'set') {
-                const resp = yield client.sendIQ(data);
-                if (!resp.jingle) {
-                    resp.jingle = {};
+    jingle.on('send', data =>
+        __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (data.type === 'set') {
+                    const resp = yield client.sendIQ(data);
+                    if (!resp.jingle) {
+                        resp.jingle = {};
+                    }
+                    resp.jingle.sid = data.jingle.sid;
+                    jingle.process(resp);
                 }
-                resp.jingle.sid = data.jingle.sid;
-                jingle.process(resp);
+                if (data.type === 'result') {
+                    client.sendIQResult({ type: 'set', id: data.id, from: data.to }, data);
+                }
+                if (data.type === 'error') {
+                    client.sendIQError({ type: 'set', id: data.id, from: data.to }, data);
+                }
+            } catch (err) {
+                console.error(err);
+                if (!err.jingle) {
+                    err.jingle = {};
+                }
+                err.jingle.sid = data.jingle.sid;
+                jingle.process(err);
             }
-            if (data.type === 'result') {
-                client.sendIQResult({ type: 'set', id: data.id, from: data.to }, data);
-            }
-            if (data.type === 'error') {
-                client.sendIQError({ type: 'set', id: data.id, from: data.to }, data);
-            }
-        }
-        catch (err) {
-            console.error(err);
-            if (!err.jingle) {
-                err.jingle = {};
-            }
-            err.jingle.sid = data.jingle.sid;
-            jingle.process(err);
-        }
-    }));
-    client.on('session:bound', (jid) => {
+        })
+    );
+    client.on('session:bound', jid => {
         jingle.selfID = jid;
     });
-    client.on('iq:set:jingle', (data) => {
+    client.on('iq:set:jingle', data => {
         jingle.process(data);
     });
-    client.on('unavailable', (pres) => {
+    client.on('unavailable', pres => {
         jingle.endPeerSessions(pres.from, undefined, true);
     });
-    client.getServices = (jid, type, version) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            externalServices: {
-                type,
-                version
-            },
-            to: jid,
-            type: 'get'
+    client.getServices = (jid, type, version) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                externalServices: {
+                    type,
+                    version
+                },
+                to: jid,
+                type: 'get'
+            });
+            const services = resp.externalServices;
+            services.services = services.services || [];
+            return services;
         });
-        const services = resp.externalServices;
-        services.services = services.services || [];
-        return services;
-    });
-    client.getServiceCredentials = (jid, host, type, port, version) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            externalServiceCredentials: {
-                host,
-                port,
-                type,
-                version
-            },
-            to: jid,
-            type: 'get'
+    client.getServiceCredentials = (jid, host, type, port, version) =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                externalServiceCredentials: {
+                    host,
+                    port,
+                    type,
+                    version
+                },
+                to: jid,
+                type: 'get'
+            });
+            return resp.externalServiceCredentials;
         });
-        return resp.externalServiceCredentials;
-    });
-    client.discoverICEServers = (opts = {}) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            const resp = yield client.getServices(client.config.server, undefined, opts.version);
-            const services = resp.services || [];
-            const discovered = [];
-            for (const service of services) {
-                client.jingle.addICEServer(service);
+    client.discoverICEServers = (opts = {}) =>
+        __awaiter(this, void 0, void 0, function* () {
+            try {
+                const resp = yield client.getServices(
+                    client.config.server,
+                    undefined,
+                    opts.version
+                );
+                const services = resp.services || [];
+                const discovered = [];
+                for (const service of services) {
+                    client.jingle.addICEServer(service);
+                }
+                return discovered;
+            } catch (err) {
+                return [];
             }
-            return discovered;
-        }
-        catch (err) {
-            return [];
-        }
-    });
+        });
 }

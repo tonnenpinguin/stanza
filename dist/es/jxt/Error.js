@@ -1,9 +1,9 @@
 export var JXTErrorCondition;
 (function (JXTErrorCondition) {
-    JXTErrorCondition["NotWellFormed"] = "not-well-formed";
-    JXTErrorCondition["RestrictedXML"] = "restricted-xml";
-    JXTErrorCondition["AlreadyClosed"] = "already-closed";
-    JXTErrorCondition["UnknownRoot"] = "unknown-stream-root";
+    JXTErrorCondition['NotWellFormed'] = 'not-well-formed';
+    JXTErrorCondition['RestrictedXML'] = 'restricted-xml';
+    JXTErrorCondition['AlreadyClosed'] = 'already-closed';
+    JXTErrorCondition['UnknownRoot'] = 'unknown-stream-root';
 })(JXTErrorCondition || (JXTErrorCondition = {}));
 export default class JXTError extends Error {
     constructor(opts) {

@@ -4,8 +4,20 @@
 // Source: https://xmpp.org/extensions/xep-0384.html
 // Version: 0.3.0 (2018-07-31)
 // ====================================================================
-import { booleanAttribute, childTextBuffer, integerAttribute, multipleChildIntegerAttribute, pubsubItemContentAliases, splicePath, textBuffer } from '../jxt';
-import { NS_OMEMO_AXOLOTL, NS_OMEMO_AXOLOTL_BUNDLES, NS_OMEMO_AXOLOTL_DEVICELIST } from '../Namespaces';
+import {
+    booleanAttribute,
+    childTextBuffer,
+    integerAttribute,
+    multipleChildIntegerAttribute,
+    pubsubItemContentAliases,
+    splicePath,
+    textBuffer
+} from '../jxt';
+import {
+    NS_OMEMO_AXOLOTL,
+    NS_OMEMO_AXOLOTL_BUNDLES,
+    NS_OMEMO_AXOLOTL_DEVICELIST
+} from '../Namespaces';
 const Protocol = [
     {
         aliases: ['message.omemo'],

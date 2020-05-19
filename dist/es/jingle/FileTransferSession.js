@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { EventEmitter } from 'events';
 import * as Hashes from 'stanza-shims';
 import { JINGLE_INFO_CHECKSUM_5, JingleAction, JingleSessionRole } from '../Constants';
@@ -36,7 +36,7 @@ export class Sender extends EventEmitter {
         channel.onbufferedamountlow = () => {
             sliceFile();
         };
-        fileReader.addEventListener('load', (event) => {
+        fileReader.addEventListener('load', event => {
             const data = event.target.result;
             pendingRead = false;
             offset += data.byteLength;
@@ -48,8 +48,7 @@ export class Sender extends EventEmitter {
                     sliceFile();
                 }
                 // Otherwise wait for bufferedamountlow event to trigger reading more data
-            }
-            else {
+            } else {
                 this.emit('progress', file.size, file.size, null);
                 this.emit('sentFile', {
                     algorithm: this.config.hash,
@@ -87,8 +86,7 @@ export class Receiver extends EventEmitter {
                 this.metadata.actualhash = this.hash.digest('hex');
                 this.emit('receivedFile', new Blob(this.receiveBuffer), this.metadata);
                 this.receiveBuffer = [];
-            }
-            else if (this.received > this.metadata.size) {
+            } else if (this.received > this.metadata.size) {
                 // FIXME
                 console.error('received more than expected, discarding...');
                 this.receiveBuffer = []; // just discard...
@@ -142,35 +140,40 @@ export default class FileTransferSession extends ICESession {
                 this.sender.send(this.file, this.channel);
             };
             try {
-                yield this.processLocal(JingleAction.SessionInitiate, () => __awaiter(this, void 0, void 0, function* () {
-                    const offer = yield this.pc.createOffer({
-                        offerToReceiveAudio: false,
-                        offerToReceiveVideo: false
-                    });
-                    const json = importFromSDP(offer.sdp);
-                    const jingle = convertIntermediateToRequest(json, this.role, this.transportType);
-                    this.contentName = jingle.contents[0].name;
-                    jingle.sid = this.sid;
-                    jingle.action = JingleAction.SessionInitiate;
-                    jingle.contents[0].application = {
-                        applicationType: NS_JINGLE_FILE_TRANSFER_5,
-                        file: {
-                            date: file.lastModified ? new Date(file.lastModified) : undefined,
-                            hashesUsed: [
-                                {
-                                    algorithm: 'sha-1'
-                                }
-                            ],
-                            name: file.name,
-                            size: file.size
-                        }
-                    };
-                    this.send('session-initiate', jingle);
-                    yield this.pc.setLocalDescription(offer);
-                }));
+                yield this.processLocal(JingleAction.SessionInitiate, () =>
+                    __awaiter(this, void 0, void 0, function* () {
+                        const offer = yield this.pc.createOffer({
+                            offerToReceiveAudio: false,
+                            offerToReceiveVideo: false
+                        });
+                        const json = importFromSDP(offer.sdp);
+                        const jingle = convertIntermediateToRequest(
+                            json,
+                            this.role,
+                            this.transportType
+                        );
+                        this.contentName = jingle.contents[0].name;
+                        jingle.sid = this.sid;
+                        jingle.action = JingleAction.SessionInitiate;
+                        jingle.contents[0].application = {
+                            applicationType: NS_JINGLE_FILE_TRANSFER_5,
+                            file: {
+                                date: file.lastModified ? new Date(file.lastModified) : undefined,
+                                hashesUsed: [
+                                    {
+                                        algorithm: 'sha-1'
+                                    }
+                                ],
+                                name: file.name,
+                                size: file.size
+                            }
+                        };
+                        this.send('session-initiate', jingle);
+                        yield this.pc.setLocalDescription(offer);
+                    })
+                );
                 next();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC offer', err);
                 return this.end('failed-application', true);
             }
@@ -183,23 +186,28 @@ export default class FileTransferSession extends ICESession {
             this.state = 'active';
             next = next || (() => undefined);
             try {
-                yield this.processLocal(JingleAction.SessionAccept, () => __awaiter(this, void 0, void 0, function* () {
-                    const answer = yield this.pc.createAnswer();
-                    const json = importFromSDP(answer.sdp);
-                    const jingle = convertIntermediateToRequest(json, this.role, this.transportType);
-                    jingle.sid = this.sid;
-                    jingle.action = 'session-accept';
-                    for (const content of jingle.contents) {
-                        content.creator = 'initiator';
-                    }
-                    this.contentName = jingle.contents[0].name;
-                    this.send('session-accept', jingle);
-                    yield this.pc.setLocalDescription(answer);
-                    yield this.processBufferedCandidates();
-                }));
+                yield this.processLocal(JingleAction.SessionAccept, () =>
+                    __awaiter(this, void 0, void 0, function* () {
+                        const answer = yield this.pc.createAnswer();
+                        const json = importFromSDP(answer.sdp);
+                        const jingle = convertIntermediateToRequest(
+                            json,
+                            this.role,
+                            this.transportType
+                        );
+                        jingle.sid = this.sid;
+                        jingle.action = 'session-accept';
+                        for (const content of jingle.contents) {
+                            content.creator = 'initiator';
+                        }
+                        this.contentName = jingle.contents[0].name;
+                        this.send('session-accept', jingle);
+                        yield this.pc.setLocalDescription(answer);
+                        yield this.processBufferedCandidates();
+                    })
+                );
                 next();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC answer', err);
                 this.end('failed-application');
             }
@@ -232,8 +240,7 @@ export default class FileTransferSession extends ICESession {
                 yield this.pc.setRemoteDescription({ type: 'offer', sdp });
                 yield this.processBufferedCandidates();
                 cb();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC answer', err);
                 cb({ condition: 'general-error' });
             }

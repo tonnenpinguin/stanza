@@ -1,15 +1,25 @@
-import { __awaiter } from "tslib";
-import { JINGLE_INFO_ACTIVE, JINGLE_INFO_HOLD, JINGLE_INFO_MUTE, JINGLE_INFO_RINGING, JINGLE_INFO_UNHOLD, JINGLE_INFO_UNMUTE, JingleAction } from '../Constants';
+import { __awaiter } from 'tslib';
+import {
+    JINGLE_INFO_ACTIVE,
+    JINGLE_INFO_HOLD,
+    JINGLE_INFO_MUTE,
+    JINGLE_INFO_RINGING,
+    JINGLE_INFO_UNHOLD,
+    JINGLE_INFO_UNMUTE,
+    JingleAction
+} from '../Constants';
 import ICESession from './ICESession';
 import { exportToSDP, importFromSDP } from './sdp/Intermediate';
 import { convertIntermediateToRequest, convertRequestToIntermediate } from './sdp/Protocol';
 function applyStreamsCompatibility(content) {
     const application = content.application;
     /* signal .streams as a=ssrc: msid */
-    if (application.streams &&
+    if (
+        application.streams &&
         application.streams.length &&
         application.sources &&
-        application.sources.length) {
+        application.sources.length
+    ) {
         const msid = application.streams[0];
         application.sources[0].parameters.msid = `${msid.id} ${msid.track}`;
         if (application.sourceGroups && application.sourceGroups.length > 0) {
@@ -29,7 +39,7 @@ export default class MediaSession extends ICESession {
         this.includesAudio = false;
         this.includesVideo = false;
         this._ringing = false;
-        this.pc.addEventListener('track', (e) => {
+        this.pc.addEventListener('track', e => {
             this.onAddTrack(e.track, e.streams[0]);
         });
         if (opts.stream) {
@@ -67,22 +77,27 @@ export default class MediaSession extends ICESession {
             this.role = 'initiator';
             this.offerOptions = opts;
             try {
-                yield this.processLocal(JingleAction.SessionInitiate, () => __awaiter(this, void 0, void 0, function* () {
-                    const offer = yield this.pc.createOffer(opts);
-                    const json = importFromSDP(offer.sdp);
-                    const jingle = convertIntermediateToRequest(json, this.role, this.transportType);
-                    jingle.sid = this.sid;
-                    jingle.action = JingleAction.SessionInitiate;
-                    for (const content of jingle.contents || []) {
-                        content.creator = 'initiator';
-                        applyStreamsCompatibility(content);
-                    }
-                    yield this.pc.setLocalDescription(offer);
-                    this.send('session-initiate', jingle);
-                }));
+                yield this.processLocal(JingleAction.SessionInitiate, () =>
+                    __awaiter(this, void 0, void 0, function* () {
+                        const offer = yield this.pc.createOffer(opts);
+                        const json = importFromSDP(offer.sdp);
+                        const jingle = convertIntermediateToRequest(
+                            json,
+                            this.role,
+                            this.transportType
+                        );
+                        jingle.sid = this.sid;
+                        jingle.action = JingleAction.SessionInitiate;
+                        for (const content of jingle.contents || []) {
+                            content.creator = 'initiator';
+                            applyStreamsCompatibility(content);
+                        }
+                        yield this.pc.setLocalDescription(offer);
+                        this.send('session-initiate', jingle);
+                    })
+                );
                 next();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC offer', err);
                 this.end('failed-application', true);
             }
@@ -101,22 +116,27 @@ export default class MediaSession extends ICESession {
             this.state = 'active';
             this.role = 'responder';
             try {
-                yield this.processLocal(JingleAction.SessionAccept, () => __awaiter(this, void 0, void 0, function* () {
-                    const answer = yield this.pc.createAnswer(opts);
-                    const json = importFromSDP(answer.sdp);
-                    const jingle = convertIntermediateToRequest(json, this.role, this.transportType);
-                    jingle.sid = this.sid;
-                    jingle.action = JingleAction.SessionAccept;
-                    for (const content of jingle.contents || []) {
-                        content.creator = 'initiator';
-                    }
-                    yield this.pc.setLocalDescription(answer);
-                    yield this.processBufferedCandidates();
-                    this.send('session-accept', jingle);
-                }));
+                yield this.processLocal(JingleAction.SessionAccept, () =>
+                    __awaiter(this, void 0, void 0, function* () {
+                        const answer = yield this.pc.createAnswer(opts);
+                        const json = importFromSDP(answer.sdp);
+                        const jingle = convertIntermediateToRequest(
+                            json,
+                            this.role,
+                            this.transportType
+                        );
+                        jingle.sid = this.sid;
+                        jingle.action = JingleAction.SessionAccept;
+                        for (const content of jingle.contents || []) {
+                            content.creator = 'initiator';
+                        }
+                        yield this.pc.setLocalDescription(answer);
+                        yield this.processBufferedCandidates();
+                        this.send('session-accept', jingle);
+                    })
+                );
                 next();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC answer', err);
                 this.end('failed-application');
             }
@@ -129,59 +149,69 @@ export default class MediaSession extends ICESession {
         super.end(reason, silent);
     }
     ring() {
-        return this.processLocal('ring', () => __awaiter(this, void 0, void 0, function* () {
-            this._log('info', 'Ringing on incoming session');
-            this.ringing = true;
-            this.send(JingleAction.SessionInfo, {
-                info: {
-                    infoType: JINGLE_INFO_RINGING
-                }
-            });
-        }));
+        return this.processLocal('ring', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                this._log('info', 'Ringing on incoming session');
+                this.ringing = true;
+                this.send(JingleAction.SessionInfo, {
+                    info: {
+                        infoType: JINGLE_INFO_RINGING
+                    }
+                });
+            })
+        );
     }
     mute(creator, name) {
-        return this.processLocal('mute', () => __awaiter(this, void 0, void 0, function* () {
-            this._log('info', 'Muting', name);
-            this.send(JingleAction.SessionInfo, {
-                info: {
-                    creator,
-                    infoType: JINGLE_INFO_MUTE,
-                    name
-                }
-            });
-        }));
+        return this.processLocal('mute', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                this._log('info', 'Muting', name);
+                this.send(JingleAction.SessionInfo, {
+                    info: {
+                        creator,
+                        infoType: JINGLE_INFO_MUTE,
+                        name
+                    }
+                });
+            })
+        );
     }
     unmute(creator, name) {
-        return this.processLocal('unmute', () => __awaiter(this, void 0, void 0, function* () {
-            this._log('info', 'Unmuting', name);
-            this.send(JingleAction.SessionInfo, {
-                info: {
-                    creator,
-                    infoType: JINGLE_INFO_UNMUTE,
-                    name
-                }
-            });
-        }));
+        return this.processLocal('unmute', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                this._log('info', 'Unmuting', name);
+                this.send(JingleAction.SessionInfo, {
+                    info: {
+                        creator,
+                        infoType: JINGLE_INFO_UNMUTE,
+                        name
+                    }
+                });
+            })
+        );
     }
     hold() {
-        return this.processLocal('hold', () => __awaiter(this, void 0, void 0, function* () {
-            this._log('info', 'Placing on hold');
-            this.send('session-info', {
-                info: {
-                    infoType: JINGLE_INFO_HOLD
-                }
-            });
-        }));
+        return this.processLocal('hold', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                this._log('info', 'Placing on hold');
+                this.send('session-info', {
+                    info: {
+                        infoType: JINGLE_INFO_HOLD
+                    }
+                });
+            })
+        );
     }
     resume() {
-        return this.processLocal('resume', () => __awaiter(this, void 0, void 0, function* () {
-            this._log('info', 'Resuming from hold');
-            this.send('session-info', {
-                info: {
-                    infoType: JINGLE_INFO_ACTIVE
-                }
-            });
-        }));
+        return this.processLocal('resume', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                this._log('info', 'Resuming from hold');
+                this.send('session-info', {
+                    info: {
+                        infoType: JINGLE_INFO_ACTIVE
+                    }
+                });
+            })
+        );
     }
     // ----------------------------------------------------------------
     // Track control methods
@@ -193,26 +223,29 @@ export default class MediaSession extends ICESession {
         if (track.kind === 'video') {
             this.includesVideo = true;
         }
-        return this.processLocal('addtrack', () => __awaiter(this, void 0, void 0, function* () {
-            if (this.pc.addTrack) {
-                this.pc.addTrack(track, stream);
-            }
-            else {
-                this.pc.addStream(stream);
-            }
-            if (cb) {
-                cb();
-            }
-        }));
+        return this.processLocal('addtrack', () =>
+            __awaiter(this, void 0, void 0, function* () {
+                if (this.pc.addTrack) {
+                    this.pc.addTrack(track, stream);
+                } else {
+                    this.pc.addStream(stream);
+                }
+                if (cb) {
+                    cb();
+                }
+            })
+        );
     }
     removeTrack(sender, cb) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.processLocal('removetrack', () => __awaiter(this, void 0, void 0, function* () {
-                this.pc.removeTrack(sender);
-                if (cb) {
-                    return cb();
-                }
-            }));
+            return this.processLocal('removetrack', () =>
+                __awaiter(this, void 0, void 0, function* () {
+                    this.pc.removeTrack(sender);
+                    if (cb) {
+                        return cb();
+                    }
+                })
+            );
         });
     }
     // ----------------------------------------------------------------
@@ -252,8 +285,7 @@ export default class MediaSession extends ICESession {
                 yield this.pc.setRemoteDescription({ type: 'offer', sdp });
                 yield this.processBufferedCandidates();
                 return cb();
-            }
-            catch (err) {
+            } catch (err) {
                 this._log('error', 'Could not create WebRTC answer', err);
                 return cb({ condition: 'general-error' });
             }

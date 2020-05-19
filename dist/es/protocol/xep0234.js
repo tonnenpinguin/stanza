@@ -5,7 +5,13 @@
 // Version: Version 0.18.3 (2017-08-24)
 // ====================================================================
 import { addAlias, attribute, childDate, childInteger, childText, integerAttribute } from '../jxt';
-import { NS_HASHES_1, NS_HASHES_2, NS_JINGLE_FILE_TRANSFER_4, NS_JINGLE_FILE_TRANSFER_5, NS_THUMBS_1 } from '../Namespaces';
+import {
+    NS_HASHES_1,
+    NS_HASHES_2,
+    NS_JINGLE_FILE_TRANSFER_4,
+    NS_JINGLE_FILE_TRANSFER_5,
+    NS_THUMBS_1
+} from '../Namespaces';
 let Protocol = [
     addAlias(NS_HASHES_2, 'hash', [
         { path: 'file.hashes', multiple: true },

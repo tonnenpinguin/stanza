@@ -1,11 +1,49 @@
 import { Agent } from '../';
-import { DataForm, IQ, Paging, Pubsub, PubsubAffiliation, PubsubAffiliations, PubsubCreate, PubsubEvent, PubsubEventConfiguration, PubsubEventDelete, PubsubEventItems, PubsubEventPurge, PubsubEventSubscription, PubsubFetch, PubsubItem, PubsubItemContent, PubsubSubscribeWithOptions, PubsubSubscription, PubsubSubscriptions, PubsubSubscriptionWithOptions, PubsubUnsubscribe, ReceivedMessage } from '../protocol';
+import {
+    DataForm,
+    IQ,
+    Paging,
+    Pubsub,
+    PubsubAffiliation,
+    PubsubAffiliations,
+    PubsubCreate,
+    PubsubEvent,
+    PubsubEventConfiguration,
+    PubsubEventDelete,
+    PubsubEventItems,
+    PubsubEventPurge,
+    PubsubEventSubscription,
+    PubsubFetch,
+    PubsubItem,
+    PubsubItemContent,
+    PubsubSubscribeWithOptions,
+    PubsubSubscription,
+    PubsubSubscriptions,
+    PubsubSubscriptionWithOptions,
+    PubsubUnsubscribe,
+    ReceivedMessage
+} from '../protocol';
 declare module '../' {
     interface Agent {
-        subscribeToNode(jid: string, opts: string | PubsubSubscribeWithOptions): Promise<PubsubSubscriptionWithOptions>;
-        unsubscribeFromNode(jid: string, opts: string | PubsubUnsubscribeOptions): Promise<PubsubSubscription>;
-        publish<T extends PubsubItemContent = PubsubItemContent>(jid: string, node: string, item: T, id?: string): Promise<IQ>;
-        getItem<T extends PubsubItemContent = PubsubItemContent>(jid: string, node: string, id: string): Promise<PubsubItem<T>>;
+        subscribeToNode(
+            jid: string,
+            opts: string | PubsubSubscribeWithOptions
+        ): Promise<PubsubSubscriptionWithOptions>;
+        unsubscribeFromNode(
+            jid: string,
+            opts: string | PubsubUnsubscribeOptions
+        ): Promise<PubsubSubscription>;
+        publish<T extends PubsubItemContent = PubsubItemContent>(
+            jid: string,
+            node: string,
+            item: T,
+            id?: string
+        ): Promise<IQ>;
+        getItem<T extends PubsubItemContent = PubsubItemContent>(
+            jid: string,
+            node: string,
+            id: string
+        ): Promise<PubsubItem<T>>;
         getItems(jid: string, node: string, opts?: Paging): Promise<PubsubFetch>;
         retract(jid: string, node: string, id: string, notify: boolean): Promise<IQ>;
         purgeNode(jid: string, node: string): Promise<IQ>;
@@ -17,8 +55,16 @@ declare module '../' {
         getDefaultSubscriptionOptions(jid: string): Promise<DataForm>;
         getSubscriptions(jid: string, opts?: PubsubSubscriptions): Promise<PubsubSubscriptions>;
         getAffiliations(jid: string, node?: string): Promise<IQ>;
-        getNodeSubscribers(jid: string, node: string | PubsubSubscriptions, opts?: PubsubSubscriptions): Promise<IQ>;
-        updateNodeSubscriptions(jid: string, node: string, delta: PubsubSubscription[]): Promise<IQ>;
+        getNodeSubscribers(
+            jid: string,
+            node: string | PubsubSubscriptions,
+            opts?: PubsubSubscriptions
+        ): Promise<IQ>;
+        updateNodeSubscriptions(
+            jid: string,
+            node: string,
+            delta: PubsubSubscription[]
+        ): Promise<IQ>;
         getNodeAffiliations(jid: string, node: string): Promise<PubsubAffiliations>;
         updateNodeAffiliations(jid: string, node: string, items: PubsubAffiliation[]): Promise<IQ>;
     }

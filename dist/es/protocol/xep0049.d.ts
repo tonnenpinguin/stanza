@@ -4,7 +4,6 @@ declare module './' {
         privateStorage?: PrivateStorage;
     }
 }
-export interface PrivateStorage {
-}
+export interface PrivateStorage {}
 declare const Protocol: DefinitionOptions;
 export default Protocol;

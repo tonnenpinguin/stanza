@@ -1,7 +1,26 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import * as hashes from 'stanza-shims';
 import { VERSION } from '../Constants';
-import { NS_DATAFORM, NS_DATAFORM_LAYOUT, NS_DATAFORM_MEDIA, NS_DATAFORM_VALIDATION, NS_DELAY, NS_EME_0, NS_FORWARD_0, NS_HASH_NAME, NS_HASHES_1, NS_HASHES_2, NS_IDLE_1, NS_JSON_0, NS_OOB, NS_PSA, NS_REFERENCE_0, NS_SHIM, NS_TIME, NS_VERSION } from '../Namespaces';
+import {
+    NS_DATAFORM,
+    NS_DATAFORM_LAYOUT,
+    NS_DATAFORM_MEDIA,
+    NS_DATAFORM_VALIDATION,
+    NS_DELAY,
+    NS_EME_0,
+    NS_FORWARD_0,
+    NS_HASH_NAME,
+    NS_HASHES_1,
+    NS_HASHES_2,
+    NS_IDLE_1,
+    NS_JSON_0,
+    NS_OOB,
+    NS_PSA,
+    NS_REFERENCE_0,
+    NS_SHIM,
+    NS_TIME,
+    NS_VERSION
+} from '../Namespaces';
 export default function (client) {
     client.disco.addFeature('jid\\20escaping');
     client.disco.addFeature(NS_DELAY);
@@ -33,7 +52,7 @@ export default function (client) {
             }
         });
     });
-    client.on('iq:get:time', (iq) => {
+    client.on('iq:get:time', iq => {
         const time = new Date();
         client.sendIQResult(iq, {
             time: {
@@ -42,28 +61,31 @@ export default function (client) {
             }
         });
     });
-    client.getSoftwareVersion = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            softwareVersion: {},
-            to: jid,
-            type: 'get'
+    client.getSoftwareVersion = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                softwareVersion: {},
+                to: jid,
+                type: 'get'
+            });
+            return resp.softwareVersion;
         });
-        return resp.softwareVersion;
-    });
-    client.getTime = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            time: {},
-            to: jid,
-            type: 'get'
+    client.getTime = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                time: {},
+                to: jid,
+                type: 'get'
+            });
+            return resp.time;
         });
-        return resp.time;
-    });
-    client.getLastActivity = (jid) => __awaiter(this, void 0, void 0, function* () {
-        const resp = yield client.sendIQ({
-            lastActivity: {},
-            to: jid,
-            type: 'get'
+    client.getLastActivity = jid =>
+        __awaiter(this, void 0, void 0, function* () {
+            const resp = yield client.sendIQ({
+                lastActivity: {},
+                to: jid,
+                type: 'get'
+            });
+            return resp.lastActivity;
         });
-        return resp.lastActivity;
-    });
 }

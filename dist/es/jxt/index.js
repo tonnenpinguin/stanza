@@ -8,7 +8,7 @@ export { default as Parser, parse } from './Parser';
 export { default as StreamParser } from './StreamParser';
 export { Registry, Translator, XMLElement };
 export function define(definitions) {
-    return (registry) => {
+    return registry => {
         registry.define(definitions);
     };
 }

@@ -4,7 +4,13 @@
 // Source: https://xmpp.org/extensions/xep-0198.html
 // Version: 1.5.2 (2016-12-08)
 // ====================================================================
-import { attribute, booleanAttribute, childBoolean, extendStreamFeatures, integerAttribute } from '../jxt';
+import {
+    attribute,
+    booleanAttribute,
+    childBoolean,
+    extendStreamFeatures,
+    integerAttribute
+} from '../jxt';
 import { NS_SMACKS_3 } from '../Namespaces';
 const Protocol = [
     extendStreamFeatures({

@@ -76,7 +76,9 @@ const Protocol = [
         aliases: [{ path, multiple: true }],
         element: 'ORG',
         fields: {
-            units: Object.assign(Object.assign({}, multipleChildText(null, 'ORGUNIT')), { order: 2 }),
+            units: Object.assign(Object.assign({}, multipleChildText(null, 'ORGUNIT')), {
+                order: 2
+            }),
             value: Object.assign(Object.assign({}, childText(null, 'ORGNAME')), { order: 1 })
         },
         namespace: NS_VCARD_TEMP,

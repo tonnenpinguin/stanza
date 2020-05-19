@@ -1,6 +1,19 @@
 import { JID } from '../JID';
 import { DefinitionOptions } from '../jxt';
-declare type BOSHErrorCondition = 'bad-request' | 'host-gone' | 'host-unknown' | 'improper-addressing' | 'internal-server-error' | 'item-not-found' | 'other-request' | 'policy-violation' | 'remote-connection-failed' | 'remote-stream-error' | 'see-other-uri' | 'system-shutdown' | 'undefined-condition';
+declare type BOSHErrorCondition =
+    | 'bad-request'
+    | 'host-gone'
+    | 'host-unknown'
+    | 'improper-addressing'
+    | 'internal-server-error'
+    | 'item-not-found'
+    | 'other-request'
+    | 'policy-violation'
+    | 'remote-connection-failed'
+    | 'remote-stream-error'
+    | 'see-other-uri'
+    | 'system-shutdown'
+    | 'undefined-condition';
 export interface BOSH {
     seeOtherURI?: string;
     acceptMediaTypes?: string;

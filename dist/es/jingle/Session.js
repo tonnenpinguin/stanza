@@ -1,6 +1,12 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { priorityQueue } from 'async';
-import { JingleAction, JingleErrorCondition, JingleReasonCondition, JingleSessionRole, StanzaErrorCondition } from '../Constants';
+import {
+    JingleAction,
+    JingleErrorCondition,
+    JingleReasonCondition,
+    JingleSessionRole,
+    StanzaErrorCondition
+} from '../Constants';
 import { uuid } from '../Utils';
 const badRequest = { condition: StanzaErrorCondition.BadRequest };
 const unsupportedInfo = {
@@ -10,95 +16,93 @@ const unsupportedInfo = {
 };
 export default class JingleSession {
     constructor(opts) {
-        var _a;
         this.parent = opts.parent;
-        this.sid = opts.sid;
-        // This might be problematic as it introduces a race condition
-        if (!this.sid) {
-            uuid().then(uuid => (this.sid = uuid));
-        }
+        this.sid = opts.sid || uuid();
         this.peerID = opts.peerID;
         this.role = opts.initiator ? JingleSessionRole.Initiator : JingleSessionRole.Responder;
         this._sessionState = 'starting';
         this._connectionState = 'starting';
         // We track the intial pending description types in case
         // of the need for a tie-breaker.
-        this.pendingApplicationTypes = (_a = opts.applicationTypes) !== null && _a !== void 0 ? _a : [];
+        this.pendingApplicationTypes = opts.applicationTypes || [];
         this.pendingAction = undefined;
         // Here is where we'll ensure that all actions are processed
         // in order, even if a particular action requires async handling.
-        this.processingQueue = priorityQueue((task, next) => __awaiter(this, void 0, void 0, function* () {
-            if (this.state === 'ended') {
-                // Don't process anything once the session has been ended
-                if (task.type === 'local' && task.reject) {
-                    task.reject(new Error('Session ended'));
-                }
-                if (next) {
-                    next();
-                }
-                return;
-            }
-            if (task.type === 'local') {
-                this._log('debug', 'Processing local action:', task.name);
-                try {
-                    const res = yield task.handler();
-                    task.resolve(res);
-                }
-                catch (err) {
-                    task.reject(err);
-                }
-                if (next) {
-                    next();
-                }
-                return;
-            }
-            const { action, changes, cb } = task;
-            this._log('debug', 'Processing remote action:', action);
-            return new Promise(resolve => {
-                const done = (err, result) => {
-                    cb(err, result);
-                    if (next) {
-                        next();
+        this.processingQueue = priorityQueue(
+            (task, next) =>
+                __awaiter(this, void 0, void 0, function* () {
+                    if (this.state === 'ended') {
+                        // Don't process anything once the session has been ended
+                        if (task.type === 'local' && task.reject) {
+                            task.reject(new Error('Session ended'));
+                        }
+                        if (next) {
+                            next();
+                        }
+                        return;
                     }
-                    resolve();
-                };
-                switch (action) {
-                    case JingleAction.ContentAccept:
-                        return this.onContentAccept(changes, done);
-                    case JingleAction.ContentAdd:
-                        return this.onContentAdd(changes, done);
-                    case JingleAction.ContentModify:
-                        return this.onContentModify(changes, done);
-                    case JingleAction.ContentReject:
-                        return this.onContentReject(changes, done);
-                    case JingleAction.ContentRemove:
-                        return this.onContentRemove(changes, done);
-                    case JingleAction.DescriptionInfo:
-                        return this.onDescriptionInfo(changes, done);
-                    case JingleAction.SecurityInfo:
-                        return this.onSecurityInfo(changes, done);
-                    case JingleAction.SessionAccept:
-                        return this.onSessionAccept(changes, done);
-                    case JingleAction.SessionInfo:
-                        return this.onSessionInfo(changes, done);
-                    case JingleAction.SessionInitiate:
-                        return this.onSessionInitiate(changes, done);
-                    case JingleAction.SessionTerminate:
-                        return this.onSessionTerminate(changes, done);
-                    case JingleAction.TransportAccept:
-                        return this.onTransportAccept(changes, done);
-                    case JingleAction.TransportInfo:
-                        return this.onTransportInfo(changes, done);
-                    case JingleAction.TransportReject:
-                        return this.onTransportReject(changes, done);
-                    case JingleAction.TransportReplace:
-                        return this.onTransportReplace(changes, done);
-                    default:
-                        this._log('error', 'Invalid or unsupported action: ' + action);
-                        done({ condition: StanzaErrorCondition.BadRequest });
-                }
-            });
-        }), 1);
+                    if (task.type === 'local') {
+                        this._log('debug', 'Processing local action:', task.name);
+                        try {
+                            const res = yield task.handler();
+                            task.resolve(res);
+                        } catch (err) {
+                            task.reject(err);
+                        }
+                        if (next) {
+                            next();
+                        }
+                        return;
+                    }
+                    const { action, changes, cb } = task;
+                    this._log('debug', 'Processing remote action:', action);
+                    return new Promise(resolve => {
+                        const done = (err, result) => {
+                            cb(err, result);
+                            if (next) {
+                                next();
+                            }
+                            resolve();
+                        };
+                        switch (action) {
+                            case JingleAction.ContentAccept:
+                                return this.onContentAccept(changes, done);
+                            case JingleAction.ContentAdd:
+                                return this.onContentAdd(changes, done);
+                            case JingleAction.ContentModify:
+                                return this.onContentModify(changes, done);
+                            case JingleAction.ContentReject:
+                                return this.onContentReject(changes, done);
+                            case JingleAction.ContentRemove:
+                                return this.onContentRemove(changes, done);
+                            case JingleAction.DescriptionInfo:
+                                return this.onDescriptionInfo(changes, done);
+                            case JingleAction.SecurityInfo:
+                                return this.onSecurityInfo(changes, done);
+                            case JingleAction.SessionAccept:
+                                return this.onSessionAccept(changes, done);
+                            case JingleAction.SessionInfo:
+                                return this.onSessionInfo(changes, done);
+                            case JingleAction.SessionInitiate:
+                                return this.onSessionInitiate(changes, done);
+                            case JingleAction.SessionTerminate:
+                                return this.onSessionTerminate(changes, done);
+                            case JingleAction.TransportAccept:
+                                return this.onTransportAccept(changes, done);
+                            case JingleAction.TransportInfo:
+                                return this.onTransportInfo(changes, done);
+                            case JingleAction.TransportReject:
+                                return this.onTransportReject(changes, done);
+                            case JingleAction.TransportReplace:
+                                return this.onTransportReplace(changes, done);
+                            default:
+                                this._log('error', 'Invalid or unsupported action: ' + action);
+                                done({ condition: StanzaErrorCondition.BadRequest });
+                        }
+                    });
+                }),
+            1
+        );
     }
     get isInitiator() {
         return this.role === JingleSessionRole.Initiator;
@@ -131,55 +135,56 @@ export default class JingleSession {
         }
     }
     send(action, data) {
-        return __awaiter(this, void 0, void 0, function* () {
-            data = data !== null && data !== void 0 ? data : {};
-            data.sid = this.sid;
-            data.action = action;
-            const requirePending = new Set([
-                JingleAction.ContentAccept,
-                JingleAction.ContentAdd,
-                JingleAction.ContentModify,
-                JingleAction.ContentReject,
-                JingleAction.ContentRemove,
-                JingleAction.SessionAccept,
-                JingleAction.SessionInitiate,
-                JingleAction.TransportAccept,
-                JingleAction.TransportReject,
-                JingleAction.TransportReplace
-            ]);
-            if (requirePending.has(action)) {
-                this.pendingAction = action;
-            }
-            else {
-                this.pendingAction = undefined;
-            }
-            this.parent.signal(this, {
-                id: yield uuid(),
-                jingle: data,
-                to: this.peerID,
-                type: 'set'
-            });
+        data = data || {};
+        data.sid = this.sid;
+        data.action = action;
+        const requirePending = new Set([
+            JingleAction.ContentAccept,
+            JingleAction.ContentAdd,
+            JingleAction.ContentModify,
+            JingleAction.ContentReject,
+            JingleAction.ContentRemove,
+            JingleAction.SessionAccept,
+            JingleAction.SessionInitiate,
+            JingleAction.TransportAccept,
+            JingleAction.TransportReject,
+            JingleAction.TransportReplace
+        ]);
+        if (requirePending.has(action)) {
+            this.pendingAction = action;
+        } else {
+            this.pendingAction = undefined;
+        }
+        this.parent.signal(this, {
+            id: uuid(),
+            jingle: data,
+            to: this.peerID,
+            type: 'set'
         });
     }
     processLocal(name, handler) {
         return new Promise((resolve, reject) => {
-            this.processingQueue.push({
-                handler,
-                name,
-                reject,
-                resolve,
-                type: 'local'
-            }, 1 // Process local requests first
+            this.processingQueue.push(
+                {
+                    handler,
+                    name,
+                    reject,
+                    resolve,
+                    type: 'local'
+                },
+                1 // Process local requests first
             );
         });
     }
     process(action, changes, cb) {
-        this.processingQueue.push({
-            action,
-            cb,
-            changes,
-            type: 'remote'
-        }, 2 // Process remote requests second
+        this.processingQueue.push(
+            {
+                action,
+                cb,
+                changes,
+                type: 'remote'
+            },
+            2 // Process remote requests second
         );
     }
     start(_opts, _next) {
@@ -237,8 +242,7 @@ export default class JingleSession {
     onSessionInfo(changes, cb) {
         if (!changes.info) {
             cb();
-        }
-        else {
+        } else {
             cb(unsupportedInfo);
         }
     }

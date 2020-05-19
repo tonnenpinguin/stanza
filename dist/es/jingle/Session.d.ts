@@ -40,7 +40,7 @@ export default class JingleSession {
     set state(value: string);
     get connectionState(): string;
     set connectionState(value: string);
-    send(action: JingleAction, data: Partial<Jingle>): Promise<void>;
+    send(action: JingleAction, data: Partial<Jingle>): void;
     processLocal(name: string, handler: () => Promise<void>): Promise<void>;
     process(action: JingleAction, changes: Jingle, cb: ActionCallback): void;
     start(_next?: ActionCallback): void;

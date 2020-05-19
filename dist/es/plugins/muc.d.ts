@@ -1,6 +1,20 @@
 import { Agent } from '../';
 import { MUCAffiliation, MUCRole } from '../Constants';
-import { DataForm, IQ, MUCBookmark, MUCConfigure, MUCDestroy, MUCDirectInvite, MUCInvite, MUCUserItem, MUCUserList, Presence, ReceivedMessage, ReceivedMUCPresence, ReceivedPresence } from '../protocol';
+import {
+    DataForm,
+    IQ,
+    MUCBookmark,
+    MUCConfigure,
+    MUCDestroy,
+    MUCDirectInvite,
+    MUCInvite,
+    MUCUserItem,
+    MUCUserList,
+    Presence,
+    ReceivedMessage,
+    ReceivedMUCPresence,
+    ReceivedPresence
+} from '../protocol';
 declare module '../' {
     interface Agent {
         joinedRooms: Map<string, string>;
@@ -8,12 +22,24 @@ declare module '../' {
         leavingRooms: Map<string, string>;
         joinRoom(jid: string, nick: string, opts?: Presence): Promise<ReceivedMUCPresence>;
         leaveRoom(jid: string, nick?: string, opts?: Presence): Promise<ReceivedPresence>;
-        ban(jid: string, occupant: string, reason?: string): Promise<IQ & {
-            muc: MUCUserList;
-        }>;
-        kick(jid: string, nick: string, reason?: string): Promise<IQ & {
-            muc: MUCUserList;
-        }>;
+        ban(
+            jid: string,
+            occupant: string,
+            reason?: string
+        ): Promise<
+            IQ & {
+                muc: MUCUserList;
+            }
+        >;
+        kick(
+            jid: string,
+            nick: string,
+            reason?: string
+        ): Promise<
+            IQ & {
+                muc: MUCUserList;
+            }
+        >;
         invite(room: string, invites: MUCInvite | MUCInvite[]): void;
         directInvite(room: string, to: string, opts?: Partial<MUCDirectInvite>): void;
         declineInvite(room: string, sender: string, reason?: string): void;
@@ -21,22 +47,51 @@ declare module '../' {
         setSubject(room: string, subject: string): void;
         getReservedNick(room: string): Promise<string>;
         requestRoomVoice(room: string): void;
-        setRoomAffiliation(room: string, jid: string, affiliation: MUCAffiliation, reason?: string): Promise<IQ & {
-            muc: MUCUserList;
-        }>;
-        setRoomRole(room: string, nick: string, role: MUCRole, reason?: string): Promise<IQ & {
-            muc: MUCUserList;
-        }>;
-        getRoomMembers(room: string, opts?: MUCUserItem): Promise<IQ & {
-            muc: MUCUserList;
-        }>;
+        setRoomAffiliation(
+            room: string,
+            jid: string,
+            affiliation: MUCAffiliation,
+            reason?: string
+        ): Promise<
+            IQ & {
+                muc: MUCUserList;
+            }
+        >;
+        setRoomRole(
+            room: string,
+            nick: string,
+            role: MUCRole,
+            reason?: string
+        ): Promise<
+            IQ & {
+                muc: MUCUserList;
+            }
+        >;
+        getRoomMembers(
+            room: string,
+            opts?: MUCUserItem
+        ): Promise<
+            IQ & {
+                muc: MUCUserList;
+            }
+        >;
         getRoomConfig(room: string): Promise<DataForm>;
-        configureRoom(room: string, form: Partial<DataForm>): Promise<IQ & {
-            muc: MUCConfigure;
-        }>;
-        destroyRoom(room: string, opts?: MUCDestroy): Promise<IQ & {
-            muc: MUCConfigure;
-        }>;
+        configureRoom(
+            room: string,
+            form: Partial<DataForm>
+        ): Promise<
+            IQ & {
+                muc: MUCConfigure;
+            }
+        >;
+        destroyRoom(
+            room: string,
+            opts?: MUCDestroy
+        ): Promise<
+            IQ & {
+                muc: MUCConfigure;
+            }
+        >;
         getUniqueRoomName(mucHost: string): Promise<string>;
         getBookmarks(): Promise<MUCBookmark[]>;
         setBookmarks(bookmarks: MUCBookmark[]): Promise<IQ>;

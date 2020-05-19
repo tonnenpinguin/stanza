@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { __awaiter } from 'tslib';
 import { Duplex } from 'readable-stream';
 import { WebSocket } from 'stanza-shims';
 import { StreamErrorCondition } from '../Constants';
@@ -44,7 +44,7 @@ export default class WSConnection extends Duplex {
             registry: this.stanzas,
             wrappedStream: false
         });
-        this.parser.on('data', (e) => {
+        this.parser.on('data', e => {
             const name = e.kind;
             const stanzaObj = e.stanza;
             if (name === 'stream') {
@@ -60,7 +60,7 @@ export default class WSConnection extends Duplex {
             }
             this.push({ kind: e.kind, stanza: e.stanza });
         });
-        this.parser.on('error', (err) => {
+        this.parser.on('error', err => {
             const streamError = {
                 condition: StreamErrorCondition.InvalidXML
             };
@@ -90,8 +90,7 @@ export default class WSConnection extends Duplex {
         if (this.socket && !this.closing && this.hasStream) {
             this.closing = true;
             this.write(this.closeHeader());
-        }
-        else {
+        } else {
             this.hasStream = false;
             this.stream = undefined;
             if (this.socket) {
@@ -105,7 +104,10 @@ export default class WSConnection extends Duplex {
         return __awaiter(this, void 0, void 0, function* () {
             let output;
             if (data) {
-                output = (_a = this.stanzas.export(dataOrName, data)) === null || _a === void 0 ? void 0 : _a.toString();
+                output =
+                    (_a = this.stanzas.export(dataOrName, data)) === null || _a === void 0
+                        ? void 0
+                        : _a.toString();
             }
             if (!output) {
                 return;
