@@ -101,9 +101,8 @@ export default function (client) {
                     client.sendIQError({ type: 'set', id: data.id, from: data.to }, data);
                 }
             } catch (err) {
-                console.error(err);
                 if (!err.jingle) {
-                    err.jingle = {};
+                    err.jingle = data.jingle;
                 }
                 err.jingle.sid = data.jingle.sid;
                 jingle.process(err);

@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 const Namespaces_1 = require('./Namespaces');
-exports.VERSION = '12.12.0';
+exports.VERSION = '12.13.0';
 // ====================================================================
 // Frequently Used Values
 // ====================================================================

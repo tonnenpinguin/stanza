@@ -1,4 +1,14 @@
 import { DefinitionOptions } from '../jxt';
+export interface Stream {}
+export interface StreamFeatures {}
+export interface StreamError {}
+export interface StanzaError {}
+export interface Message {}
+export interface Presence {}
+export interface IQBase {}
+export interface IQPayload {}
+export interface IQ extends IQBase, IQPayload {}
+export interface AtomEntry {}
 export * from './rfc3921';
 export * from './rfc4287';
 export * from './rfc6120';

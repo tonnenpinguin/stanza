@@ -9808,7 +9808,7 @@ window.XMPP = (function (e) {
                 }
                 var dr = Object.freeze({
                     __proto__: null,
-                    VERSION: '12.12.0',
+                    VERSION: '12.13.0',
                     StreamType: Ls,
                     SASLFailureCondition: Ms,
                     StreamErrorCondition: Ds,
@@ -9908,7 +9908,7 @@ window.XMPP = (function (e) {
                             e.sendIQResult(t, {
                                 softwareVersion: e.config.softwareVersion || {
                                     name: 'stanzajs.org',
-                                    version: '12.12.0'
+                                    version: '12.13.0'
                                 }
                             })
                         ),
@@ -11579,6 +11579,11 @@ window.XMPP = (function (e) {
                             s = e.from;
                         if (!s) return;
                         if ('error' === e.type) {
+                            if (
+                                (this._log('error', 'Received error response', e),
+                                n && e.error && 'unknown-session' === e.error.jingleError)
+                            )
+                                return n.end('gone', !0);
                             const t = e.error && 'tie-break' === e.error.jingleError;
                             return n && 'pending' === n.state && t
                                 ? n.end('alternative-session', !0)
@@ -11795,8 +11800,7 @@ window.XMPP = (function (e) {
                                         'error' === t.type &&
                                             e.sendIQError({ type: 'set', id: t.id, from: t.to }, t);
                                 } catch (e) {
-                                    console.error(e),
-                                        e.jingle || (e.jingle = {}),
+                                    e.jingle || (e.jingle = t.jingle),
                                         (e.jingle.sid = t.jingle.sid),
                                         a.process(e);
                                 }
@@ -12983,7 +12987,16 @@ window.XMPP = (function (e) {
                         type: e,
                         typeField: 'streamType'
                     })),
-                    ra = new Set(['from', 'id', 'lang', 'to', 'type', 'payloadType', 'error']),
+                    ra = new Set([
+                        'from',
+                        'id',
+                        'lang',
+                        'to',
+                        'type',
+                        'payloadType',
+                        'error',
+                        'streamType'
+                    ]),
                     aa = Object.values(Ls).map(e => ({
                         childrenExportOrder: { error: 2e5 },
                         defaultType: Ut,
@@ -16866,7 +16879,7 @@ window.XMPP = (function (e) {
                         }
                     }
                 });
-                const Uo = '12.12.0';
+                const Uo = '12.13.0';
                 function zo(e) {
                     const t = new Mo(e);
                     return t.use(Xr), t;

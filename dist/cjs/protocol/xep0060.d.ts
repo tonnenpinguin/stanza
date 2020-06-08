@@ -115,10 +115,10 @@ export interface PubsubRetract {
     id: string;
     notify?: boolean;
 }
-export interface PubsubFetch {
+export interface PubsubFetch<T extends PubsubItemContent = PubsubItemContent> {
     node: string;
     max?: number;
-    items?: PubsubItem[];
+    items?: PubsubItem<T>[];
 }
 export interface PubsubSubscriptionOptions {
     node?: string;

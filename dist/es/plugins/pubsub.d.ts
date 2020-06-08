@@ -44,7 +44,11 @@ declare module '../' {
             node: string,
             id: string
         ): Promise<PubsubItem<T>>;
-        getItems(jid: string, node: string, opts?: Paging): Promise<PubsubFetch>;
+        getItems<T extends PubsubItemContent = PubsubItemContent>(
+            jid: string,
+            node: string,
+            opts?: Paging
+        ): Promise<PubsubFetch<T>>;
         retract(jid: string, node: string, id: string, notify: boolean): Promise<IQ>;
         purgeNode(jid: string, node: string): Promise<IQ>;
         deleteNode(jid: string, node: string): Promise<IQ>;

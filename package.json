@@ -46,11 +46,6 @@
         "webpack-cli": "^3.3.10"
     },
     "homepage": "https://stanzajs.org",
-    "husky": {
-        "hooks": {
-            "pre-commit": "pretty-quick --stage && npm run lint && npm test"
-        }
-    },
     "jest": {
         "preset": "ts-jest",
         "testEnvironment": "node",
@@ -91,6 +86,7 @@
         "build": "ts-node scripts/build",
         "build:docs": "ts-node scripts/build-docs",
         "clean": "rimraf dist",
+        "prettier-fix": "prettier '(dist|src)/**/*.{js,ts,tsx}' --write",
         "compile": "tsc -p .",
         "compile:module": "tsc -p . --outDir ./dist/es --target es2015 --module es2015",
         "compile:rollup": "rollup -c rollup.config.js",

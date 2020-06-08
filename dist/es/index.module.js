@@ -6279,7 +6279,7 @@ function Disco$1(client) {
     });
 }
 
-const VERSION = '12.12.0';
+const VERSION = '12.13.0';
 // ====================================================================
 // Frequently Used Values
 // ====================================================================
@@ -8880,6 +8880,10 @@ class SessionManager extends EventEmitter {
             return;
         }
         if (req.type === 'error') {
+            this._log('error', 'Received error response', req);
+            if (session && req.error && req.error.jingleError === 'unknown-session') {
+                return session.end('gone', true);
+            }
             const isTieBreak = req.error && req.error.jingleError === 'tie-break';
             if (session && session.state === 'pending' && isTieBreak) {
                 return session.end('alternative-session', true);
@@ -9174,9 +9178,8 @@ function Jingle(client) {
                     client.sendIQError({ type: 'set', id: data.id, from: data.to }, data);
                 }
             } catch (err) {
-                console.error(err);
                 if (!err.jingle) {
-                    err.jingle = {};
+                    err.jingle = data.jingle;
                 }
                 err.jingle.sid = data.jingle.sid;
                 jingle.process(err);
@@ -10809,7 +10812,16 @@ const _StanzaError = Object.values(StreamType).map(streamNS => ({
     typeField: 'streamType'
 }));
 // --------------------------------------------------------------------
-const baseIQFields = new Set(['from', 'id', 'lang', 'to', 'type', 'payloadType', 'error']);
+const baseIQFields = new Set([
+    'from',
+    'id',
+    'lang',
+    'to',
+    'type',
+    'payloadType',
+    'error',
+    'streamType'
+]);
 const _IQ = Object.values(StreamType).map(streamNS => ({
     childrenExportOrder: {
         error: 200000
@@ -14329,6 +14341,7 @@ const Protocol$19 = [
     }
 ];
 
+// ====================================================================
 const Protocol$1a = [
     Protocol,
     Protocol$1,

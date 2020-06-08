@@ -87,7 +87,16 @@ const _StanzaError = Object.values(StreamType).map(streamNS => ({
     typeField: 'streamType'
 }));
 // --------------------------------------------------------------------
-const baseIQFields = new Set(['from', 'id', 'lang', 'to', 'type', 'payloadType', 'error']);
+const baseIQFields = new Set([
+    'from',
+    'id',
+    'lang',
+    'to',
+    'type',
+    'payloadType',
+    'error',
+    'streamType'
+]);
 const _IQ = Object.values(StreamType).map(streamNS => ({
     childrenExportOrder: {
         error: 200000
